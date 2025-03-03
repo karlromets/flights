@@ -18,6 +18,12 @@ public class SeatBooking {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "plane_id")
-  private Plane plane;
+  @JoinColumn(name = "booking_id")
+  private Booking booking;
+  @ManyToOne
+  @JoinColumn(name = "flight_id")
+  private Flight flight;
+  @ManyToOne
+  @JoinColumn(name = "seat_id")
+  private Seat seat;
 }
