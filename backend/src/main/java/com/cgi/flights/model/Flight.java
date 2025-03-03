@@ -28,7 +28,7 @@ public class Flight {
   @JoinColumn(name = "arrival_airport_id")
   private Airport arrivalAirport;
 
-  private Instant depatureTime;
+  private Instant departureTime;
   private Instant arrivalTime;
 
   @OneToMany(mappedBy = "bookings")
