@@ -31,7 +31,7 @@ public class Flight {
   private Instant departureTime;
   private Instant arrivalTime;
 
-  @OneToMany(mappedBy = "bookings")
+  @OneToMany(mappedBy = "flight")
   private List<Booking> bookings;
 
   @ManyToOne
