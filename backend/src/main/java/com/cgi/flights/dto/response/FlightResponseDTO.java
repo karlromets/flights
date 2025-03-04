@@ -15,10 +15,9 @@ import lombok.Data;
 public class FlightResponseDTO {
   private Long id;
   private Double price;
-  private Airport departureAirport;
-  private Airport arrivalAirport;
+  private AirportResponseDTO departureAirport;
+  private AirportResponseDTO arrivalAirport;
   private Instant departureTime;
   private Instant arrivalTime;
-  private List<Booking> bookings;
-  private Plane plane;
+  private PlaneResponseDTO plane;
 }
