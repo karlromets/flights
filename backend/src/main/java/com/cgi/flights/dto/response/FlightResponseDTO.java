@@ -3,10 +3,6 @@ package com.cgi.flights.dto.response;
 import java.time.Instant;
 import java.util.List;
 
-import com.cgi.flights.model.Airport;
-import com.cgi.flights.model.Booking;
-import com.cgi.flights.model.Plane;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,5 +15,6 @@ public class FlightResponseDTO {
   private AirportResponseDTO arrivalAirport;
   private Instant departureTime;
   private Instant arrivalTime;
+  private List<BookingsResponseDTO> bookings;
   private PlaneResponseDTO plane;
 }

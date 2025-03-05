@@ -1,13 +1,16 @@
 package com.cgi.flights.service;
 
 import com.cgi.flights.dto.response.AirportResponseDTO;
+import com.cgi.flights.dto.response.BookingsResponseDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
 import com.cgi.flights.dto.response.PlaneResponseDTO;
 import com.cgi.flights.dto.response.SeatResponseDTO;
 import com.cgi.flights.model.Airport;
+import com.cgi.flights.model.Booking;
 import com.cgi.flights.model.Flight;
 import com.cgi.flights.model.Plane;
 import com.cgi.flights.model.Seat;
+import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.FlightRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FlightService {
   private final FlightRepository flightRepository;
+  private final SeatBookingService seatBookingService;
 
   public List<FlightResponseDTO> getAllFlights() {
     List<Flight> flights = flightRepository.findAll();
@@ -32,6 +36,10 @@ public class FlightService {
               .arrivalAirport(mapToAirportDTO(flight.getArrivalAirport()))
               .departureTime(flight.getDepartureTime())
               .arrivalTime(flight.getArrivalTime())
+              .bookings(
+                  mapToBookingsResponseDTO(
+                      flight.getBookings(),
+                      seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
               .plane(mapToPlaneDTO(flight.getPlane()))
               .build());
     }
@@ -50,8 +58,42 @@ public class FlightService {
         .arrivalAirport(mapToAirportDTO(flight.getArrivalAirport()))
         .departureTime(flight.getDepartureTime())
         .arrivalTime(flight.getArrivalTime())
+        .bookings(
+            mapToBookingsResponseDTO(
+                flight.getBookings(),
+                seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
         .plane(mapToPlaneDTO(flight.getPlane()))
         .build();
+  }
+
+  private List<BookingsResponseDTO> mapToBookingsResponseDTO(
+      List<Booking> bookings, List<SeatBooking> seatBookings) {
+    List<BookingsResponseDTO> boookingsResponse = new ArrayList<>();
+
+    for (Booking booking : bookings) {
+      SeatBooking matchingSeatBooking = null;
+      for (SeatBooking seatBooking : seatBookings) {
+        if (seatBooking.getBooking().getId().equals(booking.getId())) {
+          matchingSeatBooking = seatBooking;
+          break;
+        }
+      }
+
+      if (matchingSeatBooking == null) {
+        continue;
+      }
+
+      Seat seat = matchingSeatBooking.getSeat();
+
+      boookingsResponse.add(
+          BookingsResponseDTO.builder()
+              .id(booking.getId())
+              .seatId(seat.getId())
+              .createdAt(booking.getCreatedAt())
+              .build());
+    }
+
+    return boookingsResponse;
   }
 
   private AirportResponseDTO mapToAirportDTO(Airport airport) {
