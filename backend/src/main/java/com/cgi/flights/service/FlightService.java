@@ -39,10 +39,19 @@ public class FlightService {
     return flightResponse;
   }
 
-  public Flight getFlightById(Long id) {
-    return flightRepository
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Flight not found"));
+  public FlightResponseDTO getFlightById(Long id) {
+    Flight flight =
+        flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
+
+    return FlightResponseDTO.builder()
+        .id(flight.getId())
+        .price(flight.getPrice())
+        .departureAirport(mapToAirportDTO(flight.getDepartureAirport()))
+        .arrivalAirport(mapToAirportDTO(flight.getArrivalAirport()))
+        .departureTime(flight.getDepartureTime())
+        .arrivalTime(flight.getArrivalTime())
+        .plane(mapToPlaneDTO(flight.getPlane()))
+        .build();
   }
 
   private AirportResponseDTO mapToAirportDTO(Airport airport) {
@@ -57,14 +66,16 @@ public class FlightService {
     List<Seat> seats = plane.getSeats();
     List<SeatResponseDTO> seatsResponse = new ArrayList<>();
 
-    for(Seat seat : seats) {
+    for (Seat seat : seats) {
       seatsResponse.add(mapToSeatDTO(seat));
     }
 
-    return new PlaneResponseDTO(plane.getId(), plane.getName(), plane.getProducer().getName(), seatsResponse);
+    return new PlaneResponseDTO(
+        plane.getId(), plane.getName(), plane.getProducer().getName(), seatsResponse);
   }
 
   private SeatResponseDTO mapToSeatDTO(Seat seat) {
-    return new SeatResponseDTO(seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass());
+    return new SeatResponseDTO(
+        seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass());
   }
 }
