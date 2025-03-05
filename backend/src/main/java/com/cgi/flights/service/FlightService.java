@@ -3,9 +3,11 @@ package com.cgi.flights.service;
 import com.cgi.flights.dto.response.AirportResponseDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
 import com.cgi.flights.dto.response.PlaneResponseDTO;
+import com.cgi.flights.dto.response.SeatResponseDTO;
 import com.cgi.flights.model.Airport;
 import com.cgi.flights.model.Flight;
 import com.cgi.flights.model.Plane;
+import com.cgi.flights.model.Seat;
 import com.cgi.flights.repository.FlightRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,17 @@ public class FlightService {
   }
 
   private PlaneResponseDTO mapToPlaneDTO(Plane plane) {
-    return new PlaneResponseDTO(plane.getId(), plane.getName(), plane.getProducer().getName());
+    List<Seat> seats = plane.getSeats();
+    List<SeatResponseDTO> seatsResponse = new ArrayList<>();
+
+    for(Seat seat : seats) {
+      seatsResponse.add(mapToSeatDTO(seat));
+    }
+
+    return new PlaneResponseDTO(plane.getId(), plane.getName(), plane.getProducer().getName(), seatsResponse);
+  }
+
+  private SeatResponseDTO mapToSeatDTO(Seat seat) {
+    return new SeatResponseDTO(seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass());
   }
 }
