@@ -19,7 +19,6 @@ import com.cgi.flights.specifications.FlightSpecification;
 import com.cgi.flights.utils.PaginationUtils;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Optional.ofNullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +31,12 @@ public class FlightService {
   private final FlightRepository flightRepository;
   private final SeatBookingService seatBookingService;
 
-  public PagingResult<FlightResponseDTO> getAllFlights(PaginationRequest request, FlightFilterDTO filter) {
+  public PagingResult<FlightResponseDTO> getAllFlights(
+      PaginationRequest request, FlightFilterDTO filter) {
     final Pageable pageable = PaginationUtils.getPageable(request);
 
-    Specification<Flight> spec = FlightSpecification.builder()
+    Specification<Flight> spec =
+        FlightSpecification.builder()
             .departureAirport(filter.departureAirport())
             .arrivalAirport(filter.arrivalAirport())
             .departureCity(filter.departureCity())
