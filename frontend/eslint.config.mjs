@@ -11,6 +11,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ["src/api/**"],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   eslintConfigPrettier,
 ];
