@@ -4,9 +4,9 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { AirportResponseDTO } from './airportResponseDTO';
-import type { BookingsResponseDTO } from './bookingsResponseDTO';
-import type { PlaneResponseDTO } from './planeResponseDTO';
+import type { AirportResponseDTO } from "./airportResponseDTO";
+import type { BookingsResponseDTO } from "./bookingsResponseDTO";
+import type { PlaneResponseDTO } from "./planeResponseDTO";
 
 export interface FlightResponseDTO {
   id?: number;

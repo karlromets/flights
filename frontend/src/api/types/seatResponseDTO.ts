@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { SeatClass } from './seatClass';
+import type { SeatClass } from "./seatClass";
 
 export interface SeatResponseDTO {
   id?: number;

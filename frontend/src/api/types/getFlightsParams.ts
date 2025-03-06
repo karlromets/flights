@@ -4,19 +4,19 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { GetFlightsDirection } from './getFlightsDirection';
+import type { GetFlightsDirection } from "./getFlightsDirection";
 
 export type GetFlightsParams = {
-page?: number;
-size?: number;
-sortField?: string;
-direction?: GetFlightsDirection;
-departureAirport?: string;
-arrivalAirport?: string;
-departureCity?: string;
-arrivalCity?: string;
-departureCountry?: string;
-arrivalCountry?: string;
-searchTerm?: string;
-price?: number;
+  page?: number;
+  size?: number;
+  sortField?: string;
+  direction?: GetFlightsDirection;
+  departureAirport?: string;
+  arrivalAirport?: string;
+  departureCity?: string;
+  arrivalCity?: string;
+  departureCountry?: string;
+  arrivalCountry?: string;
+  searchTerm?: string;
+  price?: number;
 };

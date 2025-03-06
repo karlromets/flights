@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { FlightResponseDTO } from './flightResponseDTO';
+import type { FlightResponseDTO } from "./flightResponseDTO";
 
 export interface PagingResultFlightResponseDTO {
   content?: FlightResponseDTO[];

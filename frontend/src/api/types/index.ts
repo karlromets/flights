@@ -5,12 +5,12 @@
  * OpenAPI spec version: v0
  */
 
-export * from './airportResponseDTO';
-export * from './bookingsResponseDTO';
-export * from './flightResponseDTO';
-export * from './getFlightsDirection';
-export * from './getFlightsParams';
-export * from './pagingResultFlightResponseDTO';
-export * from './planeResponseDTO';
-export * from './seatClass';
-export * from './seatResponseDTO';
+export * from "./airportResponseDTO";
+export * from "./bookingsResponseDTO";
+export * from "./flightResponseDTO";
+export * from "./getFlightsDirection";
+export * from "./getFlightsParams";
+export * from "./pagingResultFlightResponseDTO";
+export * from "./planeResponseDTO";
+export * from "./seatClass";
+export * from "./seatResponseDTO";

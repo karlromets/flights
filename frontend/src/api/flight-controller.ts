@@ -4,39 +4,28 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import axios from "axios";
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import type {
-  FlightResponseDTO,
-  GetFlightsParams,
-  PagingResultFlightResponseDTO
-} from './types';
+import type { FlightResponseDTO, GetFlightsParams, PagingResultFlightResponseDTO } from "./types";
 
-
-
-
-
-  export const getFlightController = () => {
-const getFlights = <TData = AxiosResponse<PagingResultFlightResponseDTO>>(
-    params?: GetFlightsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `http://localhost:8080/api/flights`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-const getFlightById = <TData = AxiosResponse<FlightResponseDTO>>(
-    id: number, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `http://localhost:8080/api/flights/${id}`,options
-    );
-  }
-return {getFlights,getFlightById}};
-export type GetFlightsResult = AxiosResponse<PagingResultFlightResponseDTO>
-export type GetFlightByIdResult = AxiosResponse<FlightResponseDTO>
+export const getFlightController = () => {
+  const getFlights = <TData = AxiosResponse<PagingResultFlightResponseDTO>>(
+    params?: GetFlightsParams,
+    options?: AxiosRequestConfig
+  ): Promise<TData> => {
+    return axios.get(`http://localhost:8080/api/flights`, {
+      ...options,
+      params: { ...params, ...options?.params },
+    });
+  };
+  const getFlightById = <TData = AxiosResponse<FlightResponseDTO>>(
+    id: number,
+    options?: AxiosRequestConfig
+  ): Promise<TData> => {
+    return axios.get(`http://localhost:8080/api/flights/${id}`, options);
+  };
+  return { getFlights, getFlightById };
+};
+export type GetFlightsResult = AxiosResponse<PagingResultFlightResponseDTO>;
+export type GetFlightByIdResult = AxiosResponse<FlightResponseDTO>;
