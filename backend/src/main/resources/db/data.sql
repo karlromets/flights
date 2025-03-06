@@ -53,15 +53,15 @@ INSERT INTO plane_producer (id, name) VALUES
 (4, 'Bombardier');
 
 -- Planes
-INSERT INTO plane (id, name, producer_id) VALUES 
-(1, 'Boeing 747', 1),
-(2, 'Airbus A380', 2),
-(3, 'Boeing 787 Dreamliner', 1),
-(4, 'Airbus A320', 2),
-(5, 'Embraer E190', 3),
-(6, 'Bombardier CRJ900', 4),
-(7, 'Boeing 737', 1),
-(8, 'Airbus A330', 2);
+INSERT INTO plane (id, name, producer_id, window_columns, aisle_columns, exit_rows) VALUES 
+(1, 'Boeing 747', 1, '{A,K}', '{C,D,G,H}', '{4,11,22,35,50}'),
+(2, 'Airbus A380', 2, '{A,K}', '{D,E,F,G}', '{10,20,30,40,50,60}'),
+(3, 'Boeing 787 Dreamliner', 1, '{A,K}', '{C,D,G,H}', '{10,27,42}'),
+(4, 'Airbus A320', 2, '{A,F}', '{C,D}', '{12,13}'),
+(5, 'Embraer E190', 3, '{A,D}', '{B,C}', '{12}'),
+(6, 'Bombardier CRJ900', 4, '{A,F}', '{C,D}', '{12}'),
+(7, 'Boeing 737', 1, '{A,F}', '{C,D}', '{14,15}'),
+(8, 'Airbus A330', 2, '{A,K}', '{C,D,G,H}', '{10,30,50}');  
 
 -- Seat Classes
 INSERT INTO seat_class (id, name, price_multiplier) VALUES 

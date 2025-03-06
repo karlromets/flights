@@ -28,4 +28,8 @@ public class Plane {
 
   @OneToMany(mappedBy = "plane", cascade = CascadeType.ALL)
   private List<Seat> seats;
+
+  private List<String> windowColumns;
+  private List<String> aisleColumns;
+  private List<Long> exitRows;
 }

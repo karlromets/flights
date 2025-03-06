@@ -118,6 +118,6 @@ public class FlightService {
 
   private SeatResponseDTO mapToSeatDTO(Seat seat) {
     return new SeatResponseDTO(
-        seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass());
+        seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass(), seat.isWindow(), seat.isAisle(), seat.isExitRow());
   }
 }

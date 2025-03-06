@@ -6,6 +6,7 @@ public record SeatResponseDTO(
     Long id,
     Long rowNumber,
     String columnLetter,
-    SeatClass seatClass
-) {
-}
+    SeatClass seatClass,
+    boolean isWindow,
+    boolean isAisle,
+    boolean isExitRow) {}

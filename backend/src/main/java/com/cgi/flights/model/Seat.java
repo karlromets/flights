@@ -1,7 +1,5 @@
 package com.cgi.flights.model;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -31,4 +30,16 @@ public class Seat {
 
   @OneToMany(mappedBy = "seat")
   private List<SeatBooking> bookings;
+
+  public boolean isWindow() {
+    return plane.getWindowColumns().contains(columnLetter);
+  }
+
+  public boolean isAisle() {
+    return plane.getAisleColumns().contains(columnLetter);
+  }
+
+  public boolean isExitRow() {
+    return plane.getExitRows().contains(rowNumber);
+  }
 }
