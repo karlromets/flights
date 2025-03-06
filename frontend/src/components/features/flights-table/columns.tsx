@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import type { AirportResponseDTO, FlightResponseDTO, PlaneResponseDTO } from "@/api/types";
+import { format } from "date-fns";
 
 export const columns: ColumnDef<FlightResponseDTO>[] = [
   {
@@ -27,7 +28,7 @@ export const columns: ColumnDef<FlightResponseDTO>[] = [
   },
   {
     accessorKey: "departureAirport",
-    header: () => <div className="text-right">Departure</div>,
+    header: () => <div className="text-right">From</div>,
     cell: ({ row }) => {
       const departureAirport = row.getValue("departureAirport") as AirportResponseDTO;
       return <div className="text-right">{departureAirport.cityName}, {departureAirport.countryName}</div>;
@@ -35,7 +36,7 @@ export const columns: ColumnDef<FlightResponseDTO>[] = [
   },
   {
     accessorKey: "arrivalAirport",
-    header: () => <div className="text-right">Arrival</div>,
+    header: () => <div className="text-right">To</div>,
     cell: ({ row }) => {
       const arrivalAirport = row.getValue("arrivalAirport") as AirportResponseDTO;
       return <div className="text-right">{arrivalAirport.cityName}, {arrivalAirport.countryName}</div>;
@@ -46,7 +47,7 @@ export const columns: ColumnDef<FlightResponseDTO>[] = [
     header: () => <div className="text-right">Departure Time</div>,
     cell: ({ row }) => {
       const departureTime = row.getValue("departureTime") as string;
-      return <div className="text-right">{departureTime}</div>;
+      return <div className="text-right">{format(departureTime, "EEE, MMM d")}</div>;
     },
   },
   {
@@ -54,7 +55,7 @@ export const columns: ColumnDef<FlightResponseDTO>[] = [
     header: () => <div className="text-right">Arrival Time</div>,
     cell: ({ row }) => {
       const arrivalTime = row.getValue("arrivalTime") as string;
-      return <div className="text-right">{arrivalTime}</div>;
+      return <div className="text-right">{format(arrivalTime, "EEE, MMM d")}</div>;
     },
   },
   {
