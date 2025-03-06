@@ -1,35 +1,68 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import type { FlightResponseDTO } from "@/api/types";
+import { ColumnDef } from "@tanstack/react-table";
+import type { AirportResponseDTO, FlightResponseDTO, PlaneResponseDTO } from "@/api/types";
 
 export const columns: ColumnDef<FlightResponseDTO>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: () => <div className="text-right">ID</div>,
+    cell: ({ row }) => {
+      const id = row.getValue("id") as number;
+      return <div className="text-right">{id}</div>;
+    },
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("price"));
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
   },
   {
     accessorKey: "departureAirport",
-    header: "Departure Airport",
+    header: () => <div className="text-right">Departure</div>,
+    cell: ({ row }) => {
+      const departureAirport = row.getValue("departureAirport") as AirportResponseDTO;
+      return <div className="text-right">{departureAirport.cityName}, {departureAirport.countryName}</div>;
+    },
   },
   {
     accessorKey: "arrivalAirport",
-    header: "Arrival Airport",
+    header: () => <div className="text-right">Arrival</div>,
+    cell: ({ row }) => {
+      const arrivalAirport = row.getValue("arrivalAirport") as AirportResponseDTO;
+      return <div className="text-right">{arrivalAirport.cityName}, {arrivalAirport.countryName}</div>;
+    },
   },
   {
     accessorKey: "departureTime",
-    header: "Departure Time",
+    header: () => <div className="text-right">Departure Time</div>,
+    cell: ({ row }) => {
+      const departureTime = row.getValue("departureTime") as string;
+      return <div className="text-right">{departureTime}</div>;
+    },
   },
   {
     accessorKey: "arrivalTime",
-    header: "Arrival Time",
+    header: () => <div className="text-right">Arrival Time</div>,
+    cell: ({ row }) => {
+      const arrivalTime = row.getValue("arrivalTime") as string;
+      return <div className="text-right">{arrivalTime}</div>;
+    },
   },
   {
     accessorKey: "plane",
-    header: "Plane",
+    header: () => <div className="text-right">Plane</div>,
+    cell: ({ row }) => {
+      const plane = row.getValue("plane") as PlaneResponseDTO;
+      return <div className="text-right">{plane.name}</div>;
+    },
   },
-]
+];
