@@ -8,13 +8,18 @@ import com.cgi.flights.dto.response.SeatResponseDTO;
 import com.cgi.flights.model.Airport;
 import com.cgi.flights.model.Booking;
 import com.cgi.flights.model.Flight;
+import com.cgi.flights.model.PaginationRequest;
+import com.cgi.flights.model.PagingResult;
 import com.cgi.flights.model.Plane;
 import com.cgi.flights.model.Seat;
 import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.FlightRepository;
+import com.cgi.flights.utils.PaginationUtils;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,8 +28,9 @@ public class FlightService {
   private final FlightRepository flightRepository;
   private final SeatBookingService seatBookingService;
 
-  public List<FlightResponseDTO> getAllFlights() {
-    List<Flight> flights = flightRepository.findAll();
+  public PagingResult<FlightResponseDTO> getAllFlights(PaginationRequest request) {
+    final Pageable pageable = PaginationUtils.getPageable(request);
+    Page<Flight> flights = flightRepository.findAll(pageable);
     List<FlightResponseDTO> flightResponse = new ArrayList<>();
 
     for (Flight flight : flights) {
@@ -44,7 +50,13 @@ public class FlightService {
               .build());
     }
 
-    return flightResponse;
+    return new PagingResult<>(
+        flightResponse,
+        flights.getTotalPages(),
+        flights.getTotalElements(),
+        flights.getSize(),
+        flights.getNumber(),
+        flights.isEmpty());
   }
 
   public FlightResponseDTO getFlightById(Long id) {
@@ -118,6 +130,12 @@ public class FlightService {
 
   private SeatResponseDTO mapToSeatDTO(Seat seat) {
     return new SeatResponseDTO(
-        seat.getId(), seat.getRowNumber(), seat.getColumnLetter(), seat.getSeatClass(), seat.isWindow(), seat.isAisle(), seat.isExitRow());
+        seat.getId(),
+        seat.getRowNumber(),
+        seat.getColumnLetter(),
+        seat.getSeatClass(),
+        seat.isWindow(),
+        seat.isAisle(),
+        seat.isExitRow());
   }
 }
