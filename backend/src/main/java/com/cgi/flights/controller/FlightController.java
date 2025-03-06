@@ -1,5 +1,6 @@
 package com.cgi.flights.controller;
 
+import com.cgi.flights.dto.request.FlightFilterDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
 import com.cgi.flights.model.PaginationRequest;
 import com.cgi.flights.model.PagingResult;
@@ -24,9 +25,27 @@ public class FlightController {
       @RequestParam(required = false, defaultValue = "0") Integer page,
       @RequestParam(required = false, defaultValue = "10") Integer size,
       @RequestParam(required = false, defaultValue = "id") String sortField,
-      @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction) {
+      @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
+      @RequestParam(required = false) String departureAirport,
+      @RequestParam(required = false) String arrivalAirport,
+      @RequestParam(required = false) String departureCity,
+      @RequestParam(required = false) String arrivalCity,
+      @RequestParam(required = false) String departureCountry,
+      @RequestParam(required = false) String arrivalCountry,
+      @RequestParam(required = false) String searchTerm,
+      @RequestParam(required = false) Double price) {
+    FlightFilterDTO filter =
+        new FlightFilterDTO(
+            departureAirport,
+            arrivalAirport,
+            departureCity,
+            arrivalCity,
+            departureCountry,
+            arrivalCountry,
+            searchTerm,
+            price);
     final PaginationRequest request = new PaginationRequest(page, size, sortField, direction);
-    final PagingResult<FlightResponseDTO> flights = flightService.getAllFlights(request);
+    final PagingResult<FlightResponseDTO> flights = flightService.getAllFlights(request, filter);
     return ResponseEntity.ok(flights);
   }
 

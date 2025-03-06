@@ -1,5 +1,6 @@
 package com.cgi.flights.service;
 
+import com.cgi.flights.dto.request.FlightFilterDTO;
 import com.cgi.flights.dto.response.AirportResponseDTO;
 import com.cgi.flights.dto.response.BookingsResponseDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
@@ -14,12 +15,15 @@ import com.cgi.flights.model.Plane;
 import com.cgi.flights.model.Seat;
 import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.FlightRepository;
+import com.cgi.flights.specifications.FlightSpecification;
 import com.cgi.flights.utils.PaginationUtils;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Optional.ofNullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,9 +32,21 @@ public class FlightService {
   private final FlightRepository flightRepository;
   private final SeatBookingService seatBookingService;
 
-  public PagingResult<FlightResponseDTO> getAllFlights(PaginationRequest request) {
+  public PagingResult<FlightResponseDTO> getAllFlights(PaginationRequest request, FlightFilterDTO filter) {
     final Pageable pageable = PaginationUtils.getPageable(request);
-    Page<Flight> flights = flightRepository.findAll(pageable);
+
+    Specification<Flight> spec = FlightSpecification.builder()
+            .departureAirport(filter.departureAirport())
+            .arrivalAirport(filter.arrivalAirport())
+            .departureCity(filter.departureCity())
+            .arrivalCity(filter.arrivalCity())
+            .departureCountry(filter.departureCountry())
+            .arrivalCountry(filter.arrivalCountry())
+            .searchTerm(filter.searchTerm())
+            .price(filter.price())
+            .build();
+
+    Page<Flight> flights = flightRepository.findAll(spec, pageable);
     List<FlightResponseDTO> flightResponse = new ArrayList<>();
 
     for (Flight flight : flights) {
