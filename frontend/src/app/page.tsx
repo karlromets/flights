@@ -1,9 +1,10 @@
 import { getFlightController } from "@/api/flight-controller";
+import type { GetFlightsParams } from "@/api/types";
 
-async function getFlights() {
+async function getFlights(params: GetFlightsParams) {
   const flightController = getFlightController();
   try {
-    const response = await flightController.getFlights();
+    const response = await flightController.getFlights(params);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -11,7 +12,7 @@ async function getFlights() {
 }
 
 export default async function Home() {
-  const flights = await getFlights();
+  const flights = await getFlights({});
   console.log(flights);
 
   return (
