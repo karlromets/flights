@@ -5,7 +5,7 @@ import { getFlightController } from "@/api/flight-controller";
 import type { GetFlightsParams, PagingResultFlightResponseDTO } from "@/api/types";
 import { columns } from "@/components/features/flights-table/columns";
 import { DataTable } from "@/components/features/flights-table/data-table";
-
+import FlightFilters from "@/components/features/flights-table/filters";
 const flightController = getFlightController();
 
 async function getFlights(params: GetFlightsParams) {
@@ -47,6 +47,10 @@ export function PaginatedFlightsTable({ initialData }: PaginatedFlightsTableProp
   }, [pagination, initialData]);
 
   return (
+    <>
+    <div className="container mx-auto">
+      <FlightFilters />
+    </div>
     <div className="container mx-auto">
       {flights && flights.content && flights.content.length > 0 ? (
         <DataTable
@@ -61,5 +65,6 @@ export function PaginatedFlightsTable({ initialData }: PaginatedFlightsTableProp
         </div>
       )}
     </div>
+    </>
   );
 }
