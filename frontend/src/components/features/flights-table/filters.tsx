@@ -70,149 +70,156 @@ export default function FlightFilters({ onFilterChange }: FlightFiltersProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-        <FormField
-          control={form.control}
-          name="searchTerm"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Search</FormLabel>
-              <FormControl>
-                <Input placeholder="Estonia" type="text" {...field} />
-              </FormControl>
-              <FormDescription>Search flights</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="departureTime"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Departure</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-5xl mx-auto p-6">
+        <div className="bg-card rounded-lg border shadow-sm p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="searchTerm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Search</FormLabel>
                   <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                    >
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                    <Input placeholder="Search flights..." type="text" className="w-full" {...field} />
                   </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>Date when the plane leaves</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormDescription>Search flights by any keyword</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="arrivalTime"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Arrival</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field: { value, onChange } }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Price Range</FormLabel>
                   <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                    >
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                    <div className="pt-2">
+                      <Slider
+                        min={10}
+                        max={2000}
+                        step={10}
+                        defaultValue={[2000]}
+                        onValueChange={(vals) => {
+                          onChange(vals[0]);
+                        }}
+                      />
+                    </div>
                   </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>Date when the plane arrives</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormDescription>Maximum price: ${value || 2000}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field: { value, onChange } }) => (
-            <FormItem>
-              <FormLabel>Price - {value || 2000}</FormLabel>
-              <FormControl>
-                <Slider
-                  min={10}
-                  max={2000}
-                  step={10}
-                  defaultValue={[2000]}
-                  onValueChange={(vals) => {
-                    onChange(vals[0]);
-                  }}
-                />
-              </FormControl>
-              <FormDescription>Adjust the price by sliding.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="departureTime"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-base">Departure Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>Select departure date</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="departureCountry"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>From</FormLabel>
-              <FormControl>
-                <LocationSelector
-                  onCountryChange={(country) => {
-                    // setDepartureCountryName(country?.name || "");
-                    form.setValue(field.name, [country?.name || "", /* departureStateName || */ ""]);
-                  }}
-                  /* onStateChange={(state) => {
-                    setDepartureStateName(state?.name || "");
-                    form.setValue(field.name, [departureCountryName || "", state?.name || ""]);
-                  }} */
-                />
-              </FormControl>
-              <FormDescription>Where will you take off from?</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="arrivalTime"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-base">Arrival Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>Select arrival date</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="arrivalCountry"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>To</FormLabel>
-              <FormControl>
-                <LocationSelector
-                  onCountryChange={(country) => {
-                    // setArrivalCountryName(country?.name || "");
-                    form.setValue(field.name, [country?.name || "", /* arrivalStateName || */ ""]);
-                  }}
-                  /* onStateChange={(state) => {
-                    setArrivalStateName(state?.name || "");
-                    form.setValue(field.name, [arrivalCountryName || "", state?.name || ""]);
-                  }} */
-                />
-              </FormControl>
-              <FormDescription>Where will you land?</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+            <FormField
+              control={form.control}
+              name="departureCountry"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Departure Location</FormLabel>
+                  <FormControl>
+                    <LocationSelector
+                      onCountryChange={(country) => {
+                        form.setValue(field.name, [country?.name || "", ""]);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>Select departure country</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="arrivalCountry"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Arrival Location</FormLabel>
+                  <FormControl>
+                    <LocationSelector
+                      onCountryChange={(country) => {
+                        form.setValue(field.name, [country?.name || "", ""]);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>Select arrival country</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <Button type="submit" className="w-full sm:w-auto">
+              Search Flights
+            </Button>
+          </div>
+        </div>
       </form>
     </Form>
   );
