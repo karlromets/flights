@@ -32,6 +32,8 @@ public class FlightController {
       @RequestParam(required = false) String arrivalCity,
       @RequestParam(required = false) String departureCountry,
       @RequestParam(required = false) String arrivalCountry,
+      @RequestParam(required = false) String departureTime,
+      @RequestParam(required = false) String arrivalTime,
       @RequestParam(required = false) String searchTerm,
       @RequestParam(required = false) Double price) {
     FlightFilterDTO filter =
@@ -42,6 +44,8 @@ public class FlightController {
             arrivalCity,
             departureCountry,
             arrivalCountry,
+            departureTime,
+            arrivalTime,
             searchTerm,
             price);
     final PaginationRequest request = new PaginationRequest(page, size, sortField, direction);

@@ -17,6 +17,7 @@ import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.FlightRepository;
 import com.cgi.flights.specifications.FlightSpecification;
 import com.cgi.flights.utils.PaginationUtils;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,8 @@ public class FlightService {
             .arrivalCity(filter.arrivalCity())
             .departureCountry(filter.departureCountry())
             .arrivalCountry(filter.arrivalCountry())
+            .departureTime(filter.departureTime() != null ? Instant.parse(filter.departureTime()) : null)
+            .arrivalTime(filter.arrivalTime() != null ? Instant.parse(filter.arrivalTime()) : null)
             .searchTerm(filter.searchTerm())
             .price(filter.price())
             .build();

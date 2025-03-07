@@ -7,5 +7,7 @@ public record FlightFilterDTO(
     String arrivalCity,
     String departureCountry,
     String arrivalCountry,
+    String departureTime,
+    String arrivalTime,
     String searchTerm,
     Double price) {}
