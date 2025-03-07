@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 
 // Import JSON data directly
 import countries from '@/data/countries.json'
-import states from '@/data/states.json'
+// import states from '@/data/states.json'
 
 interface Timezone {
   zoneName: string
@@ -55,56 +55,56 @@ interface CountryProps {
   emojiU: string
 }
 
-interface StateProps {
-  id: number
-  name: string
-  country_id: number
-  country_code: string
-  country_name: string
-  state_code: string
-  type: string | null
-  latitude: string
-  longitude: string
-}
+// interface StateProps {
+//   id: number
+//   name: string
+//   country_id: number
+//   country_code: string
+//   country_name: string
+//   state_code: string
+//   type: string | null
+//   latitude: string
+//   longitude: string
+// }
 
 interface LocationSelectorProps {
   disabled?: boolean
   onCountryChange?: (country: CountryProps | null) => void
-  onStateChange?: (state: StateProps | null) => void
+  // onStateChange?: (state: StateProps | null) => void
 }
 
 const LocationSelector = ({
   disabled,
   onCountryChange,
-  onStateChange,
+  // onStateChange,
 }: LocationSelectorProps) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryProps | null>(
     null,
   )
-  const [selectedState, setSelectedState] = useState<StateProps | null>(null)
+  // const [selectedState, setSelectedState] = useState<StateProps | null>(null)
   const [openCountryDropdown, setOpenCountryDropdown] = useState(false)
-  const [openStateDropdown, setOpenStateDropdown] = useState(false)
+  // const [openStateDropdown, setOpenStateDropdown] = useState(false)
 
   // Cast imported JSON data to their respective types
   const countriesData = countries as CountryProps[]
-  const statesData = states as StateProps[]
+  // const statesData = states as StateProps[]
 
   // Filter states for selected country
-  const availableStates = statesData.filter(
-    (state) => state.country_id === selectedCountry?.id,
-  )
+  // const availableStates = statesData.filter(
+  //   (state) => state.country_id === selectedCountry?.id,
+  // )
 
   const handleCountrySelect = (country: CountryProps | null) => {
     setSelectedCountry(country)
-    setSelectedState(null) // Reset state when country changes
+    // setSelectedState(null) // Reset state when country changes
     onCountryChange?.(country)
-    onStateChange?.(null)
+    // onStateChange?.(null)
   }
 
-  const handleStateSelect = (state: StateProps | null) => {
-    setSelectedState(state)
-    onStateChange?.(state)
-  }
+  // const handleStateSelect = (state: StateProps | null) => {
+  //   setSelectedState(state)
+  //   onStateChange?.(state)
+  // }
 
   return (
     <div className="flex gap-4">
@@ -169,7 +169,7 @@ const LocationSelector = ({
       </Popover>
 
       {/* State Selector - Only shown if selected country has states */}
-      {availableStates.length > 0 && (
+      {/* {availableStates.length > 0 && (
         <Popover open={openStateDropdown} onOpenChange={setOpenStateDropdown}>
           <PopoverTrigger asChild>
             <Button
@@ -222,7 +222,7 @@ const LocationSelector = ({
             </Command>
           </PopoverContent>
         </Popover>
-      )}
+      )} */}
     </div>
   )
 }
