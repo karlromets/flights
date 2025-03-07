@@ -17,6 +17,8 @@ export type GetFlightsParams = {
   arrivalCity?: string;
   departureCountry?: string;
   arrivalCountry?: string;
+  departureTime?: string;
+  arrivalTime?: string;
   searchTerm?: string;
   price?: number;
 };
