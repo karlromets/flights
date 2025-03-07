@@ -13,6 +13,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import LocationSelector from "@/components/ui/location-input";
+import { GetFlightsParams } from "@/api/types";
 
 const formSchema = z.object({
   searchTerm: z.string().min(1).min(3).max(150).optional(),
@@ -23,7 +24,11 @@ const formSchema = z.object({
   arrivalCountry: z.tuple([z.string(), z.string().optional()]).optional(),
 });
 
-export default function FlightFilters() {
+interface FlightFiltersProps {
+  onFilterChange: (filters: GetFlightsParams) => void;
+}
+
+export default function FlightFilters({ onFilterChange }: FlightFiltersProps) {
   //   const [departureCountryName, setDepartureCountryName] = useState<string>("");
   //   const [departureStateName, setDepartureStateName] = useState<string>("");
   //   const [arrivalCountryName, setArrivalCountryName] = useState<string>("");
@@ -31,15 +36,27 @@ export default function FlightFilters() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      departureTime: new Date(),
-      arrivalTime: new Date(),
-    },
+    // defaultValues: {
+    //   departureTime: new Date(),
+    //   arrivalTime: new Date(),
+    // },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
+      const apiParams: GetFlightsParams = {
+        page: 0,
+        size: 10,
+        ...(values.searchTerm && { query: values.searchTerm }),
+        ...(values.departureTime && { departureDate: values.departureTime.toISOString() }),
+        ...(values.arrivalTime && { arrivalDate: values.arrivalTime.toISOString() }),
+        ...(values.price && { price: values.price }),
+        ...(values.departureCountry?.[0] && { departureCountry: values.departureCountry[0] }),
+        ...(values.arrivalCountry?.[0] && { arrivalCountry: values.arrivalCountry[0] }),
+      };
+
+      onFilterChange(apiParams);
+      // console.log(values);
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(values, null, 2)}</code>
