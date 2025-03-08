@@ -1,7 +1,5 @@
 package com.cgi.flights.dto.response;
 
-import com.cgi.flights.model.SeatClass;
-
 public record SeatResponseDTO(
     Long id,
     Long rowNumber,
@@ -10,4 +8,5 @@ public record SeatResponseDTO(
     String SeatClass,
     boolean isWindow,
     boolean isAisle,
-    boolean isExitRow) {}
+    boolean isExitRow,
+    boolean isOccupied) {}

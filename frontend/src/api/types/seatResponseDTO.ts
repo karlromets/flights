@@ -4,14 +4,15 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { SeatClass } from "./seatClass";
 
 export interface SeatResponseDTO {
   id?: number;
   rowNumber?: number;
   columnLetter?: string;
-  seatClass?: SeatClass;
+  price?: number;
+  SeatClass?: string;
   isWindow?: boolean;
   isAisle?: boolean;
   isExitRow?: boolean;
+  isOccupied?: boolean;
 }

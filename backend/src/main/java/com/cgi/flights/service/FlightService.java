@@ -44,7 +44,8 @@ public class FlightService {
             .arrivalCity(filter.arrivalCity())
             .departureCountry(filter.departureCountry())
             .arrivalCountry(filter.arrivalCountry())
-            .departureTime(filter.departureTime() != null ? Instant.parse(filter.departureTime()) : null)
+            .departureTime(
+                filter.departureTime() != null ? Instant.parse(filter.departureTime()) : null)
             .arrivalTime(filter.arrivalTime() != null ? Instant.parse(filter.arrivalTime()) : null)
             .searchTerm(filter.searchTerm())
             .price(filter.price())
@@ -62,11 +63,11 @@ public class FlightService {
               .arrivalAirport(mapToAirportDTO(flight.getArrivalAirport()))
               .departureTime(flight.getDepartureTime())
               .arrivalTime(flight.getArrivalTime())
-              .bookings(
-                  mapToBookingsResponseDTO(
-                      flight.getBookings(),
+              .plane(
+                  mapToPlaneDTO(
+                      flight.getPlane(),
+                      flight.getPrice(),
                       seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
-              .plane(mapToPlaneDTO(flight.getPlane(), flight.getPrice()))
               .build());
     }
 
@@ -90,42 +91,12 @@ public class FlightService {
         .arrivalAirport(mapToAirportDTO(flight.getArrivalAirport()))
         .departureTime(flight.getDepartureTime())
         .arrivalTime(flight.getArrivalTime())
-        .bookings(
-            mapToBookingsResponseDTO(
-                flight.getBookings(),
+        .plane(
+            mapToPlaneDTO(
+                flight.getPlane(),
+                flight.getPrice(),
                 seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
-        .plane(mapToPlaneDTO(flight.getPlane(), flight.getPrice()))
         .build();
-  }
-
-  private List<BookingsResponseDTO> mapToBookingsResponseDTO(
-      List<Booking> bookings, List<SeatBooking> seatBookings) {
-    List<BookingsResponseDTO> boookingsResponse = new ArrayList<>();
-
-    for (Booking booking : bookings) {
-      SeatBooking matchingSeatBooking = null;
-      for (SeatBooking seatBooking : seatBookings) {
-        if (seatBooking.getBooking().getId().equals(booking.getId())) {
-          matchingSeatBooking = seatBooking;
-          break;
-        }
-      }
-
-      if (matchingSeatBooking == null) {
-        continue;
-      }
-
-      Seat seat = matchingSeatBooking.getSeat();
-
-      boookingsResponse.add(
-          BookingsResponseDTO.builder()
-              .id(booking.getId())
-              .seatId(seat.getId())
-              .createdAt(booking.getCreatedAt())
-              .build());
-    }
-
-    return boookingsResponse;
   }
 
   private AirportResponseDTO mapToAirportDTO(Airport airport) {
@@ -136,19 +107,23 @@ public class FlightService {
         airport.getCountry().getName());
   }
 
-  private PlaneResponseDTO mapToPlaneDTO(Plane plane, Double price) {
+  private PlaneResponseDTO mapToPlaneDTO(
+      Plane plane, Double price, List<SeatBooking> seatBookings) {
     List<Seat> seats = plane.getSeats();
     List<SeatResponseDTO> seatsResponse = new ArrayList<>();
 
     for (Seat seat : seats) {
-      seatsResponse.add(mapToSeatDTO(seat, price));
+      boolean isOccupied =
+          seatBookings.stream().anyMatch(sb -> sb.getSeat().getId().equals(seat.getId()));
+
+      seatsResponse.add(mapToSeatDTO(seat, price, isOccupied));
     }
 
     return new PlaneResponseDTO(
         plane.getId(), plane.getName(), plane.getProducer().getName(), seatsResponse);
   }
 
-  private SeatResponseDTO mapToSeatDTO(Seat seat, Double price) {
+  private SeatResponseDTO mapToSeatDTO(Seat seat, Double price, boolean isOccupied) {
     return new SeatResponseDTO(
         seat.getId(),
         seat.getRowNumber(),
@@ -157,6 +132,7 @@ public class FlightService {
         seat.getSeatClass().getName(),
         seat.isWindow(),
         seat.isAisle(),
-        seat.isExitRow());
+        seat.isExitRow(),
+        isOccupied);
   }
 }

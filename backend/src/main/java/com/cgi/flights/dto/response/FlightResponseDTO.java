@@ -15,6 +15,5 @@ public class FlightResponseDTO {
   private AirportResponseDTO arrivalAirport;
   private Instant departureTime;
   private Instant arrivalTime;
-  private List<BookingsResponseDTO> bookings;
   private PlaneResponseDTO plane;
 }
