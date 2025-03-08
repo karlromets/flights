@@ -1,4 +1,5 @@
 import { getFlightController } from "@/api/flight-controller";
+import SeatToggleGroup from "@/components/features/seats/seat-toggles";
 import { Button } from "@/components/ui/button";
 import { SeatMapper, SeatPreferences } from "@/lib/utils";
 
@@ -54,27 +55,32 @@ export default async function FlightPage({ params }: FlightPageProps) {
   return (
     <>
       <div className="container mx-auto">
-        <div className="flex flex-col gap-2 mx-auto w-[500px]">
-          <div className="flex">
-            <span className="font-bold text-sm h-9 pr-[70px] py-2"></span>
-            {sm.getColumns().map((col) => (
-              <span className="font-bold text-sm h-9 px-[15.5px] py-2" key={col}>
-                {col}
-              </span>
-            ))}
+        <div className="grid grid-cols-2">
+          <div className="bg-accent">
+            <h1>{flight.departureAirport.countryName}</h1>
           </div>
-          {totalRows.map((row) => (
-            <div key={row} className="flex justify-center gap-2">
-              <span className="font-bold text-sm h-9 px-[15.5px] pt-1" key={row}>
-                {row}
-              </span>
-              {sm.getSeatsByRow(row).map((seat) => (
-                <Button variant={seat.isOccupied ? "destructive" : "default"} key={seat.id} className="w-6 h-6 p-4">
-                  {seat.id}
-                </Button>
+          <div className="flex flex-col gap-2 mx-auto w-[500px]">
+            <div className="flex">
+              <span className="font-bold text-sm h-9 pr-[70px] py-2"></span>
+              {sm.getColumns().map((col) => (
+                <span className="font-bold text-sm h-9 px-[15.5px] py-2" key={col}>
+                  {col}
+                </span>
               ))}
             </div>
-          ))}
+            {totalRows.map((row) => (
+              <div key={row} className="flex justify-center gap-2">
+                <span className="font-bold text-sm h-9 px-[15.5px] pt-1" key={row}>
+                  {row}
+                </span>
+                {sm.getSeatsByRow(row).map((seat) => (
+                  <Button variant={seat.isOccupied ? "destructive" : "default"} key={seat.id} className="w-6 h-6 p-4">
+                    {seat.id}
+                  </Button>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
