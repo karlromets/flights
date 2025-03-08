@@ -1,7 +1,9 @@
 import { getFlightController } from "@/api/flight-controller";
 import { FlightDetails } from "@/components/features/seat-map/flight-details";
-import { Button } from "@/components/ui/button";
-import { SeatMapper, SeatPreferences } from "@/lib/utils";
+import SeatMap from "@/components/features/seat-map/seat-map";
+import { SeatPreferencesProvider } from "@/components/features/seat-map/seat-preferences-context";
+import SeatSuggestor from "@/components/features/seat-map/seat-suggestor";
+// import { SeatMapper } from "@/lib/utils";
 
 async function getFlight(id: number) {
   const flightController = getFlightController();
@@ -28,62 +30,21 @@ export default async function FlightPage({ params }: FlightPageProps) {
     return <h1>Flight details not available</h1>;
   }
   const seats = flight.plane.seats;
-  const sm = new SeatMapper(seats);
-
-  // console.log(seats);
-  // console.log("Total", sm.getTotal());
-  // console.log("Occupied", sm.getOccupied());
-  // console.log("Available", sm.getAvailable());
-  // console.log("Columns", sm.getColumns());
-  // console.log("Rows", sm.getRows());
-  // console.log("Seats by row", sm.getSeatsByRow(9));
-  // console.log("First Class", sm.getSeatsByClass("First Class"));
-  // console.log("Window", sm.getWindowSeats());
-  // console.log("Aisle", sm.getAisleSeats());
-  // console.log("Exit", sm.getExitRowSeats());
-  const preferences: SeatPreferences = {
-    count: 3,
-    isWindow: false,
-    isAisle: false,
-    isExitRow: true,
-    adjacentSeats: true,
-  };
-  sm.getSuggestions(preferences);
-
-  console.log(flight);
-
-  const totalRows = sm.getRows();
 
   return (
     <>
       <div className="container mx-auto">
-        <div className="grid grid-cols-2">
-          <div>
-            <FlightDetails flight={flight} />
-          </div>
-          <div className="flex flex-col gap-2 mx-auto w-[500px]">
-            <div className="flex">
-              <span className="font-bold text-sm h-9 pr-[70px] py-2"></span>
-              {sm.getColumns().map((col) => (
-                <span className="font-bold text-sm h-9 px-[15.5px] py-2" key={col}>
-                  {col}
-                </span>
-              ))}
+        <SeatPreferencesProvider>
+          <div className="grid grid-cols-2">
+            <div>
+              <FlightDetails flight={flight} />
+              <SeatSuggestor />
             </div>
-            {totalRows.map((row) => (
-              <div key={row} className="flex justify-center gap-2">
-                <span className="font-bold text-sm h-9 px-[15.5px] pt-1" key={row}>
-                  {row}
-                </span>
-                {sm.getSeatsByRow(row).map((seat) => (
-                  <Button variant={seat.isOccupied ? "destructive" : "default"} key={seat.id} className="w-6 h-6 p-4">
-                    {seat.id}
-                  </Button>
-                ))}
-              </div>
-            ))}
+            <div className="flex flex-col gap-2 mx-auto w-[500px]">
+              <SeatMap seats={seats} />
+            </div>
           </div>
-        </div>
+        </SeatPreferencesProvider>
       </div>
     </>
   );

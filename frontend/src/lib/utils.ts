@@ -112,6 +112,12 @@ export class SeatMapper {
           }
         }
       });
+
+      if (possibleSequences.length > 0) {
+        suggestions = possibleSequences.flat();
+      } else {
+        return [];
+      }
     }
 
     if (suggestions.length < prefs.count) {
