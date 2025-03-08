@@ -8,11 +8,11 @@ import type { AirportResponseDTO } from "./airportResponseDTO";
 import type { PlaneResponseDTO } from "./planeResponseDTO";
 
 export interface FlightResponseDTO {
-  id?: number;
-  price?: number;
-  departureAirport?: AirportResponseDTO;
-  arrivalAirport?: AirportResponseDTO;
-  departureTime?: string;
-  arrivalTime?: string;
-  plane?: PlaneResponseDTO;
+  id: number;
+  price: number;
+  departureAirport: AirportResponseDTO;
+  arrivalAirport: AirportResponseDTO;
+  departureTime: string;
+  arrivalTime: string;
+  plane: PlaneResponseDTO;
 }

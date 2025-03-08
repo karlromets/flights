@@ -1,19 +1,18 @@
 package com.cgi.flights.dto.response;
 
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class FlightResponseDTO {
-  private Long id;
-  private Double price;
-  private AirportResponseDTO departureAirport;
-  private AirportResponseDTO arrivalAirport;
-  private Instant departureTime;
-  private Instant arrivalTime;
-  private PlaneResponseDTO plane;
+  @NotNull private Long id;
+  @NotNull private Double price;
+  @NotNull private AirportResponseDTO departureAirport;
+  @NotNull private AirportResponseDTO arrivalAirport;
+  @NotNull private Instant departureTime;
+  @NotNull private Instant arrivalTime;
+  @NotNull private PlaneResponseDTO plane;
 }
