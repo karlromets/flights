@@ -118,14 +118,14 @@ public class FlightSpecification implements Specification<Flight> {
           like(
               cb, root.get(DEPARTURE_AIRPORT_FIELD).get(COUNTRY_FIELD).get(NAME_FIELD), searchTerm);
       Predicate departureCityPred =
-          like(cb, root.get(DEPARTURE_AIRPORT_FIELD).get(CITY_FIELD), searchTerm);
+          like(cb, root.get(DEPARTURE_AIRPORT_FIELD).get(CITY_FIELD).get(NAME_FIELD), searchTerm);
       Predicate departureAirportPred =
           like(cb, root.get(DEPARTURE_AIRPORT_FIELD).get(NAME_FIELD), searchTerm);
 
       Predicate arrivalCountryPred =
           like(cb, root.get(ARRIVAL_AIRPORT_FIELD).get(COUNTRY_FIELD).get(NAME_FIELD), searchTerm);
       Predicate arrivalCityPred =
-          like(cb, root.get(ARRIVAL_AIRPORT_FIELD).get(CITY_FIELD), searchTerm);
+          like(cb, root.get(ARRIVAL_AIRPORT_FIELD).get(CITY_FIELD).get(NAME_FIELD), searchTerm);
       Predicate arrivalAirportPred =
           like(cb, root.get(ARRIVAL_AIRPORT_FIELD).get(NAME_FIELD), searchTerm);
 
