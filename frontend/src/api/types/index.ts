@@ -6,6 +6,7 @@
  */
 
 export * from "./airportResponseDTO";
+export * from "./countryResponseDTO";
 export * from "./flightResponseDTO";
 export * from "./getFlightsDirection";
 export * from "./getFlightsParams";
