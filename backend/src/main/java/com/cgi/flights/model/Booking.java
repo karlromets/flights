@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.Instant;
 import lombok.Data;
 
 @Data
@@ -19,10 +18,4 @@ public class Booking {
   @ManyToOne
   @JoinColumn(name = "flight_id")
   private Flight flight;
-
-  private String passengerName;
-  private String passengerEmail;
-  private String passengerPhone;
-
-  private Instant createdAt = Instant.now();
 }

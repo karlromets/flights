@@ -537,15 +537,15 @@ INSERT INTO flight (id, price, departure_time, arrival_time, departure_airport_i
 (16, 1550.00, '2023-12-25 08:00:00', '2023-12-26 13:00:00', 6, 11, 8); -- Sydney to LAX
 
 -- Bookings
-INSERT INTO booking (id, flight_id, passenger_name, passenger_email, passenger_phone, created_at) VALUES 
-(1, 1, 'John Smith', 'john.smith@example.com', '+1-555-123-4567', '2023-11-15 10:30:00'),
-(2, 1, 'Emma Johnson', 'emma.johnson@example.com', '+1-555-234-5678', '2023-11-16 14:45:00'),
-(3, 2, 'Michael Brown', 'michael.brown@example.com', '+44-20-1234-5678', '2023-11-17 09:15:00'),
-(4, 3, 'Sophia Williams', 'sophia.williams@example.com', '+1-555-345-6789', '2023-11-18 16:20:00'),
-(5, 5, 'James Davis', 'james.davis@example.com', '+44-20-2345-6789', '2023-11-19 11:10:00'),
-(6, 9, 'Olivia Miller', 'olivia.miller@example.com', '+1-555-456-7890', '2023-11-20 13:25:00'),
-(7, 13, 'William Wilson', 'william.wilson@example.com', '+1-555-567-8901', '2023-11-21 08:40:00'),
-(8, 15, 'Ava Moore', 'ava.moore@example.com', '+1-555-678-9012', '2023-11-22 15:55:00');
+INSERT INTO booking (id, flight_id) VALUES 
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3),
+(5, 5),
+(6, 9),
+(7, 13),
+(8, 15);
 
 -- Seat Bookings
 INSERT INTO seat_booking (id, booking_id, flight_id, seat_id) VALUES 
