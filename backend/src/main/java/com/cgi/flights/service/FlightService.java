@@ -2,12 +2,10 @@ package com.cgi.flights.service;
 
 import com.cgi.flights.dto.request.FlightFilterDTO;
 import com.cgi.flights.dto.response.AirportResponseDTO;
-import com.cgi.flights.dto.response.BookingsResponseDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
 import com.cgi.flights.dto.response.PlaneResponseDTO;
 import com.cgi.flights.dto.response.SeatResponseDTO;
 import com.cgi.flights.model.Airport;
-import com.cgi.flights.model.Booking;
 import com.cgi.flights.model.Flight;
 import com.cgi.flights.model.PaginationRequest;
 import com.cgi.flights.model.PagingResult;
