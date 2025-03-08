@@ -25,15 +25,35 @@ export class SeatMapper {
     return this.seats.filter((s) => !s.isOccupied).length;
   }
 
+  getWindowSeats(): SeatResponseDTO[] {
+    return this.seats.filter((s) => s.isWindow)
+  }
+  
+  getAisleSeats(): SeatResponseDTO[] {
+    return this.seats.filter((s) => s.isAisle)
+  }
+
+  getExitRowSeats(): SeatResponseDTO[] {
+    return this.seats.filter((s) => s.isExitRow)
+  }
+
   getColumns(): string[] {
     const cols = new Set<string>();
-    this.seats.forEach((seat) => cols.add(seat.columnLetter));
+    this.seats.forEach((s) => cols.add(s.columnLetter));
     return Array.from(cols);
   }
 
   getRows(): number[] {
     const cols = new Set<number>();
-    this.seats.forEach((seat) => cols.add(seat.rowNumber));
+    this.seats.forEach((s) => cols.add(s.rowNumber));
     return Array.from(cols);
+  }
+
+  getSeatsByRow(row: number): SeatResponseDTO[] {
+    return this.seats.filter((s) => s.rowNumber === row);
+  }
+
+  getSeatsByClass(seatClass: string): SeatResponseDTO[] {
+    return this.seats.filter((s) => s.SeatClass === seatClass);
   }
 }
