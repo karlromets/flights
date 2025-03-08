@@ -6,6 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export interface SeatPreferences {
+  count: number;
+  isWindow: boolean;
+  isAisle: boolean;
+  isExitRow: boolean;
+  adjacentSeats: boolean;
+}
+
 export class SeatMapper {
   private seats: SeatResponseDTO[];
 
@@ -26,15 +34,15 @@ export class SeatMapper {
   }
 
   getWindowSeats(): SeatResponseDTO[] {
-    return this.seats.filter((s) => s.isWindow)
+    return this.seats.filter((s) => s.isWindow);
   }
-  
+
   getAisleSeats(): SeatResponseDTO[] {
-    return this.seats.filter((s) => s.isAisle)
+    return this.seats.filter((s) => s.isAisle);
   }
 
   getExitRowSeats(): SeatResponseDTO[] {
-    return this.seats.filter((s) => s.isExitRow)
+    return this.seats.filter((s) => s.isExitRow);
   }
 
   getColumns(): string[] {
@@ -55,5 +63,61 @@ export class SeatMapper {
 
   getSeatsByClass(seatClass: string): SeatResponseDTO[] {
     return this.seats.filter((s) => s.SeatClass === seatClass);
+  }
+
+  getSuggestions(prefs: SeatPreferences): SeatResponseDTO[] {
+    // Filter out occupied seats
+    let suggestions = this.seats.filter((s) => !s.isOccupied);
+
+    if (prefs.isAisle) {
+      suggestions = suggestions.filter((s) => s.isAisle);
+    } else if (prefs.isWindow) {
+      suggestions = suggestions.filter((s) => s.isWindow);
+    }
+    if (prefs.isExitRow) {
+      suggestions = suggestions.filter((s) => s.isExitRow);
+    }
+
+    if (prefs.adjacentSeats) {
+      // Group seats by row
+      const seatsByRow = new Map<number, SeatResponseDTO[]>();
+
+      suggestions.forEach((s) => {
+        if (!seatsByRow.has(s.rowNumber)) {
+          seatsByRow.set(s.rowNumber, []);
+        }
+        seatsByRow.get(s.rowNumber)!.push(s);
+      });
+
+      const possibleSequences: SeatResponseDTO[][] = [];
+
+      const c = prefs.count;
+
+      seatsByRow.forEach((rowSeats) => {
+        if (rowSeats.length > prefs.count) {
+          for (let i = 0; i < rowSeats.length; i++) {
+            let consecutive = true;
+
+            for (let j = c - 1; j > 0; j--) {
+              const possible = rowSeats.find((seat) => seat.id === rowSeats[i].id + j);
+              if (!possible) {
+                consecutive = false;
+                break;
+              }
+            }
+
+            if (consecutive) {
+              possibleSequences.push(rowSeats.slice(i, i + prefs.count));
+            }
+          }
+        }
+      });
+    }
+
+    if (suggestions.length < prefs.count) {
+      return [];
+    }
+
+    return suggestions;
   }
 }
