@@ -66,7 +66,7 @@ public class FlightService {
                   mapToBookingsResponseDTO(
                       flight.getBookings(),
                       seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
-              .plane(mapToPlaneDTO(flight.getPlane()))
+              .plane(mapToPlaneDTO(flight.getPlane(), flight.getPrice()))
               .build());
     }
 
@@ -94,7 +94,7 @@ public class FlightService {
             mapToBookingsResponseDTO(
                 flight.getBookings(),
                 seatBookingService.getAllSeatBookingsByFlightId(flight.getId())))
-        .plane(mapToPlaneDTO(flight.getPlane()))
+        .plane(mapToPlaneDTO(flight.getPlane(), flight.getPrice()))
         .build();
   }
 
@@ -136,24 +136,25 @@ public class FlightService {
         airport.getCountry().getName());
   }
 
-  private PlaneResponseDTO mapToPlaneDTO(Plane plane) {
+  private PlaneResponseDTO mapToPlaneDTO(Plane plane, Double price) {
     List<Seat> seats = plane.getSeats();
     List<SeatResponseDTO> seatsResponse = new ArrayList<>();
 
     for (Seat seat : seats) {
-      seatsResponse.add(mapToSeatDTO(seat));
+      seatsResponse.add(mapToSeatDTO(seat, price));
     }
 
     return new PlaneResponseDTO(
         plane.getId(), plane.getName(), plane.getProducer().getName(), seatsResponse);
   }
 
-  private SeatResponseDTO mapToSeatDTO(Seat seat) {
+  private SeatResponseDTO mapToSeatDTO(Seat seat, Double price) {
     return new SeatResponseDTO(
         seat.getId(),
         seat.getRowNumber(),
         seat.getColumnLetter(),
-        seat.getSeatClass(),
+        seat.getSeatClass().getPriceMultiplier() * price,
+        seat.getSeatClass().getName(),
         seat.isWindow(),
         seat.isAisle(),
         seat.isExitRow());

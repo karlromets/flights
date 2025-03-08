@@ -6,7 +6,8 @@ public record SeatResponseDTO(
     Long id,
     Long rowNumber,
     String columnLetter,
-    SeatClass seatClass,
+    Double price,
+    String SeatClass,
     boolean isWindow,
     boolean isAisle,
     boolean isExitRow) {}
