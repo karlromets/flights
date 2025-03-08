@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import { getCountryController } from '@/api/country-controller'
 
 // Import JSON data directly
 import countries from '@/data/countries.json'
@@ -84,10 +85,27 @@ const LocationSelector = ({
   // const [selectedState, setSelectedState] = useState<StateProps | null>(null)
   const [openCountryDropdown, setOpenCountryDropdown] = useState(false)
   // const [openStateDropdown, setOpenStateDropdown] = useState(false)
+  const [availableCountries, setAvailableCountries] = useState<CountryProps[]>([])
 
-  // Cast imported JSON data to their respective types
-  const countriesData = countries as CountryProps[]
-  // const statesData = states as StateProps[]
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await getCountryController().getCountries()
+        const apiCountries = response.data
+        
+        // Filter and map countries from JSON to match API response structure
+        const filteredCountries = (countries as CountryProps[]).filter(c => 
+          apiCountries.some(apiCountry => apiCountry.name === c.name)
+        )
+        
+        setAvailableCountries(filteredCountries)
+      } catch (error) {
+        console.error('Error fetching countries:', error)
+      }
+    }
+    
+    fetchCountries()
+  }, [])
 
   // Filter states for selected country
   // const availableStates = statesData.filter(
@@ -136,7 +154,7 @@ const LocationSelector = ({
               <CommandEmpty>No country found.</CommandEmpty>
               <CommandGroup>
                 <ScrollArea className="h-[300px]">
-                  {countriesData.map((country) => (
+                  {availableCountries.map((country) => (
                     <CommandItem
                       key={country.id}
                       value={country.name}
