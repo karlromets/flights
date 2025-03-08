@@ -80,7 +80,7 @@ export default function FlightFilters({ onFilterChange }: FlightFiltersProps) {
                 <FormItem>
                   <FormLabel className="text-base">Search</FormLabel>
                   <FormControl>
-                    <Input placeholder="Search flights..." type="text" className="w-full" {...field} />
+                    <Input placeholder="Search flights..." type="text" className="w-full" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormDescription>Search flights by any keyword</FormDescription>
                   <FormMessage />
