@@ -47,7 +47,7 @@ export default function FlightFilters({ onFilterChange }: FlightFiltersProps) {
       const apiParams: GetFlightsParams = {
         page: 0,
         size: 10,
-        ...(values.searchTerm && { query: values.searchTerm }),
+        ...(values.searchTerm && { searchTerm: values.searchTerm }),
         ...(values.departureTime && { departureDate: values.departureTime.toISOString() }),
         ...(values.arrivalTime && { arrivalDate: values.arrivalTime.toISOString() }),
         ...(values.price && { price: values.price }),
