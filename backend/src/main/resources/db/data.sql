@@ -54,7 +54,7 @@ INSERT INTO plane_producer (id, name) VALUES
 
 -- Planes
 INSERT INTO plane (id, name, producer_id, window_columns, aisle_columns, exit_rows) VALUES 
-(1, 'Boeing 747', 1, '{A,K}', '{C,D,G,H}', '{4,11,22,35,42}'),
+(1, 'Boeing 747', 1, '{A,K}', '{C,D,E,F,G,H}', '{4,11,22,35,42}'),
 (2, 'Airbus A380', 2, '{A,K}', '{D,E,F,G}', '{10,20,30,40,50,60}'),
 (3, 'Boeing 787 Dreamliner', 1, '{A,K}', '{C,D,G,H}', '{10,27,42}'),
 (4, 'Airbus A320', 2, '{A,F}', '{C,D}', '{12,13}'),
