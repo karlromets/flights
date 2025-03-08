@@ -9,7 +9,19 @@ INSERT INTO country (id, name) VALUES
 (7, 'Canada'),
 (8, 'Spain'),
 (9, 'Italy'),
-(10, 'Netherlands');
+(10, 'Netherlands'),
+(11, 'China'),
+(12, 'Brazil'),
+(13, 'India'),
+(14, 'United Arab Emirates'),
+(15, 'South Korea'),
+(23, 'Singapore'),
+(24, 'Thailand'),
+(25, 'Turkey'),
+(26, 'Russia'),
+(27, 'Hong Kong'),
+(28, 'Malaysia'),
+(29, 'Indonesia');
 
 -- Cities
 INSERT INTO city (id, name) VALUES 
@@ -26,7 +38,22 @@ INSERT INTO city (id, name) VALUES
 (11, 'Los Angeles'),
 (12, 'Chicago'),
 (13, 'San Francisco'),
-(14, 'Miami');
+(14, 'Miami'),
+(15, 'Beijing'),
+(16, 'São Paulo'),
+(17, 'Mumbai'),
+(18, 'Dubai'),
+(19, 'Seoul'),
+(20, 'Houston'),
+(21, 'Manchester'),
+(22, 'Osaka'),
+(23, 'Singapore'),
+(24, 'Bangkok'),
+(25, 'Istanbul'),
+(26, 'Moscow'),
+(27, 'Hong Kong'),
+(28, 'Kuala Lumpur'),
+(29, 'Jakarta');
 
 -- Airports
 INSERT INTO airport (id, name, country_id, city_id) VALUES 
@@ -43,25 +70,32 @@ INSERT INTO airport (id, name, country_id, city_id) VALUES
 (11, 'Los Angeles International Airport', 1, 11),
 (12, 'O''Hare International Airport', 1, 12),
 (13, 'San Francisco International Airport', 1, 13),
-(14, 'Miami International Airport', 1, 14);
+(14, 'Miami International Airport', 1, 14),
+(15, 'Beijing Capital International Airport', 11, 15),
+(16, 'Guarulhos International Airport', 12, 16),
+(17, 'Chhatrapati Shivaji Maharaj International Airport', 13, 17),
+(18, 'Dubai International Airport', 14, 18),
+(19, 'Incheon International Airport', 15, 19),
+(20, 'George Bush Intercontinental Airport', 1, 20),
+(21, 'Manchester Airport', 2, 21),
+(22, 'Kansai International Airport', 5, 22),
+(23, 'Changi Airport', 23, 23),
+(24, 'Suvarnabhumi Airport', 24, 24),
+(25, 'Istanbul Airport', 25, 25),
+(26, 'Sheremetyevo International Airport', 26, 26),
+(27, 'Hong Kong International Airport', 27, 27),
+(28, 'Kuala Lumpur International Airport', 28, 28),
+(29, 'Soekarno–Hatta International Airport', 29, 29);
 
 -- Plane Producers
 INSERT INTO plane_producer (id, name) VALUES 
 (1, 'Boeing'),
-(2, 'Airbus'),
-(3, 'Embraer'),
-(4, 'Bombardier');
+(2, 'Airbus');
 
 -- Planes
 INSERT INTO plane (id, name, producer_id, window_columns, aisle_columns, exit_rows) VALUES 
 (1, 'Boeing 747', 1, '{A,K}', '{C,D,E,F,G,H}', '{4,11,22,35,42}'),
-(2, 'Airbus A380', 2, '{A,K}', '{D,E,F,G}', '{10,20,30,40,50,60}'),
-(3, 'Boeing 787 Dreamliner', 1, '{A,K}', '{C,D,G,H}', '{10,27,42}'),
-(4, 'Airbus A320', 2, '{A,F}', '{C,D}', '{12,13}'),
-(5, 'Embraer E190', 3, '{A,D}', '{B,C}', '{12}'),
-(6, 'Bombardier CRJ900', 4, '{A,F}', '{C,D}', '{12}'),
-(7, 'Boeing 737', 1, '{A,F}', '{C,D}', '{14,15}'),
-(8, 'Airbus A330', 2, '{A,K}', '{C,D,G,H}', '{10,30,50}');  
+(2, 'Airbus A320', 2, '{A,F}', '{C,D}', '{12,13}');
 
 -- Seat Classes
 INSERT INTO seat_class (id, name, price_multiplier) VALUES 
@@ -482,78 +516,87 @@ INSERT INTO seat (id, row_number, column_letter, plane_id, seat_class_id) VALUES
 
 -- Seats for Airbus A320 (Plane ID 4) - Updated IDs
 INSERT INTO seat (id, row_number, column_letter, plane_id, seat_class_id) VALUES
-(401, 1, 'A', 4, 3),
-(402, 1, 'B', 4, 3),
-(403, 1, 'C', 4, 3),
-(404, 1, 'D', 4, 3),
-(405, 2, 'A', 4, 3),
-(406, 2, 'B', 4, 3),
-(407, 2, 'C', 4, 3),
-(408, 2, 'D', 4, 3),
--- Economy (16 seats)
-(409, 3, 'A', 4, 1),
-(410, 3, 'B', 4, 1),
-(411, 3, 'C', 4, 1),
-(412, 3, 'D', 4, 1),
-(413, 4, 'A', 4, 1),
-(414, 4, 'B', 4, 1),
-(415, 4, 'C', 4, 1),
-(416, 4, 'D', 4, 1),
-(417, 5, 'A', 4, 1),
-(418, 5, 'B', 4, 1),
-(419, 5, 'C', 4, 1),
-(420, 5, 'D', 4, 1),
-(421, 6, 'A', 4, 1),
-(422, 6, 'B', 4, 1),
-(423, 6, 'C', 4, 1),
-(424, 6, 'D', 4, 1);
+-- Business Class (Rows 1-3, 18 seats)
+(401, 1, 'A', 2, 3),
+(402, 1, 'B', 2, 3),
+(403, 1, 'C', 2, 3),
+(404, 1, 'D', 2, 3),
+(405, 1, 'E', 2, 3),
+(406, 1, 'F', 2, 3),
+(407, 2, 'A', 2, 3),
+(408, 2, 'B', 2, 3),
+(409, 2, 'C', 2, 3),
+(410, 2, 'D', 2, 3),
+(411, 2, 'E', 2, 3),
+(412, 2, 'F', 2, 3),
+(413, 3, 'A', 2, 3),
+(414, 3, 'B', 2, 3),
+(415, 3, 'C', 2, 3),
+(416, 3, 'D', 2, 3),
+(417, 3, 'E', 2, 3),
+(418, 3, 'F', 2, 3),
 
--- Flights
-INSERT INTO flight (id, price, departure_time, arrival_time, departure_airport_id, arrival_airport_id, plane_id) VALUES 
--- Transatlantic flights
-(1, 850.00, '2023-12-15 08:00:00', '2023-12-15 20:00:00', 1, 2, 1), -- JFK to Heathrow
-(2, 900.00, '2023-12-15 22:00:00', '2023-12-16 10:00:00', 2, 1, 1), -- Heathrow to JFK
-(3, 780.00, '2023-12-16 09:30:00', '2023-12-16 23:00:00', 1, 3, 3), -- JFK to Charles de Gaulle
-(4, 820.00, '2023-12-16 14:00:00', '2023-12-17 04:00:00', 3, 1, 3), -- Charles de Gaulle to JFK
+-- Economy Class (Rows 4-13, 180 seats)
+(419, 4, 'A', 2, 1),
+(420, 4, 'B', 2, 1),
+(421, 4, 'C', 2, 1),
+(422, 4, 'D', 2, 1),
+(423, 4, 'E', 2, 1),
+(424, 4, 'F', 2, 1),
+-- Rows 5-12
+(425, 5, 'A', 2, 1),
+(426, 5, 'B', 2, 1),
+(427, 5, 'C', 2, 1),
+(428, 5, 'D', 2, 1),
+(429, 5, 'E', 2, 1),
+(430, 5, 'F', 2, 1),
+(431, 6, 'A', 2, 1),
+(432, 6, 'B', 2, 1),
+(433, 6, 'C', 2, 1),
+(434, 6, 'D', 2, 1),
+(435, 6, 'E', 2, 1),
+(436, 6, 'F', 2, 1),
+(437, 7, 'A', 2, 1),
+(438, 7, 'B', 2, 1),
+(439, 7, 'C', 2, 1),
+(440, 7, 'D', 2, 1),
+(441, 7, 'E', 2, 1),
+(442, 7, 'F', 2, 1),
+(443, 8, 'A', 2, 1),
+(444, 8, 'B', 2, 1),
+(445, 8, 'C', 2, 1),
+(446, 8, 'D', 2, 1),
+(447, 8, 'E', 2, 1),
+(448, 8, 'F', 2, 1),
+(449, 9, 'A', 2, 1),
+(450, 9, 'B', 2, 1),
+(451, 9, 'C', 2, 1),
+(452, 9, 'D', 2, 1),
+(453, 9, 'E', 2, 1),
+(454, 9, 'F', 2, 1),
+(455, 10, 'A', 2, 1),
+(456, 10, 'B', 2, 1),
+(457, 10, 'C', 2, 1),
+(458, 10, 'D', 2, 1),
+(459, 10, 'E', 2, 1),
+(460, 10, 'F', 2, 1),
+(461, 11, 'A', 2, 1),
+(462, 11, 'B', 2, 1),
+(463, 11, 'C', 2, 1),
+(464, 11, 'D', 2, 1),
+(465, 11, 'E', 2, 1),
+(466, 11, 'F', 2, 1),
+(467, 12, 'A', 2, 1),
+(468, 12, 'B', 2, 1),
+(469, 12, 'C', 2, 1),
+(470, 12, 'D', 2, 1),
+(471, 12, 'E', 2, 1),
+(472, 12, 'F', 2, 1),
+-- Row 13
+(473, 13, 'A', 2, 1),
+(474, 13, 'B', 2, 1),
+(475, 13, 'C', 2, 1),
+(476, 13, 'D', 2, 1),
+(477, 13, 'E', 2, 1),
+(478, 13, 'F', 2, 1);
 
--- European flights
-(5, 320.00, '2023-12-17 07:15:00', '2023-12-17 09:30:00', 2, 3, 4), -- Heathrow to Charles de Gaulle
-(6, 310.00, '2023-12-17 11:45:00', '2023-12-17 14:00:00', 3, 2, 4), -- Charles de Gaulle to Heathrow
-(7, 280.00, '2023-12-18 08:30:00', '2023-12-18 11:15:00', 3, 4, 5), -- Charles de Gaulle to Berlin
-(8, 290.00, '2023-12-18 13:00:00', '2023-12-18 15:45:00', 4, 3, 5), -- Berlin to Charles de Gaulle
-
--- Domestic US flights
-(9, 420.00, '2023-12-19 06:30:00', '2023-12-19 09:45:00', 1, 11, 7), -- JFK to LAX
-(10, 410.00, '2023-12-19 11:30:00', '2023-12-19 14:45:00', 11, 1, 7), -- LAX to JFK
-(11, 250.00, '2023-12-20 08:00:00', '2023-12-20 10:00:00', 1, 12, 6), -- JFK to Chicago
-(12, 240.00, '2023-12-20 12:30:00', '2023-12-20 14:30:00', 12, 1, 6), -- Chicago to JFK
-
--- Asian routes
-(13, 1200.00, '2023-12-21 00:30:00', '2023-12-21 18:30:00', 1, 5, 3), -- JFK to Tokyo
-(14, 1250.00, '2023-12-22 22:00:00', '2023-12-23 16:00:00', 5, 1, 3), -- Tokyo to JFK
-
--- Australia routes
-(15, 1500.00, '2023-12-23 01:00:00', '2023-12-24 06:00:00', 11, 6, 8), -- LAX to Sydney
-(16, 1550.00, '2023-12-25 08:00:00', '2023-12-26 13:00:00', 6, 11, 8); -- Sydney to LAX
-
--- Bookings
-INSERT INTO booking (id, flight_id) VALUES 
-(1, 1),
-(2, 1),
-(3, 2),
-(4, 3),
-(5, 5),
-(6, 9),
-(7, 13),
-(8, 15);
-
--- Seat Bookings
-INSERT INTO seat_booking (id, booking_id, flight_id, seat_id) VALUES 
-(1, 1, 1, 1),  -- John Smith, First Class on JFK to Heathrow
-(2, 2, 1, 5),  -- Emma Johnson, Business Class on JFK to Heathrow
-(3, 3, 2, 2),  -- Michael Brown, First Class on Heathrow to JFK
-(4, 4, 3, 13), -- Sophia Williams, Premium Economy on JFK to Charles de Gaulle
-(5, 5, 5, 49), -- James Davis, Business Class on Heathrow to Charles de Gaulle
-(6, 6, 9, 25), -- Olivia Miller, Economy on JFK to LAX
-(7, 7, 13, 6), -- William Wilson, Business Class on JFK to Tokyo
-(8, 8, 15, 57); -- Ava Moore, Economy on LAX to Sydney
