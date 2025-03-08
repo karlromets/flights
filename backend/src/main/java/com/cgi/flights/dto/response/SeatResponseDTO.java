@@ -1,12 +1,14 @@
 package com.cgi.flights.dto.response;
 
+import jakarta.validation.constraints.NotNull;
+
 public record SeatResponseDTO(
-    Long id,
-    Long rowNumber,
-    String columnLetter,
-    Double price,
-    String SeatClass,
-    boolean isWindow,
-    boolean isAisle,
-    boolean isExitRow,
-    boolean isOccupied) {}
+    @NotNull Long id,
+    @NotNull Long rowNumber,
+    @NotNull String columnLetter,
+    @NotNull Double price,
+    @NotNull String SeatClass,
+    @NotNull boolean isWindow,
+    @NotNull boolean isAisle,
+    @NotNull boolean isExitRow,
+    @NotNull boolean isOccupied) {}

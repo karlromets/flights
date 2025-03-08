@@ -6,13 +6,13 @@
  */
 
 export interface SeatResponseDTO {
-  id?: number;
-  rowNumber?: number;
-  columnLetter?: string;
-  price?: number;
-  SeatClass?: string;
-  isWindow?: boolean;
-  isAisle?: boolean;
-  isExitRow?: boolean;
-  isOccupied?: boolean;
+  id: number;
+  rowNumber: number;
+  columnLetter: string;
+  price: number;
+  SeatClass: string;
+  isWindow: boolean;
+  isAisle: boolean;
+  isExitRow: boolean;
+  isOccupied: boolean;
 }
