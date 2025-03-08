@@ -1,5 +1,5 @@
 import { getFlightController } from "@/api/flight-controller";
-import SeatToggleGroup from "@/components/features/seats/seat-toggles";
+import { FlightDetails } from "@/components/features/seat-map/flight-details";
 import { Button } from "@/components/ui/button";
 import { SeatMapper, SeatPreferences } from "@/lib/utils";
 
@@ -48,7 +48,9 @@ export default async function FlightPage({ params }: FlightPageProps) {
     isExitRow: true,
     adjacentSeats: true,
   };
-  console.log(sm.getSuggestions(preferences));
+  sm.getSuggestions(preferences);
+
+  console.log(flight);
 
   const totalRows = sm.getRows();
 
@@ -56,8 +58,8 @@ export default async function FlightPage({ params }: FlightPageProps) {
     <>
       <div className="container mx-auto">
         <div className="grid grid-cols-2">
-          <div className="bg-accent">
-            <h1>{flight.departureAirport.countryName}</h1>
+          <div>
+            <FlightDetails flight={flight} />
           </div>
           <div className="flex flex-col gap-2 mx-auto w-[500px]">
             <div className="flex">
