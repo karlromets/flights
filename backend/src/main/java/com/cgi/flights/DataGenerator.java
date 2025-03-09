@@ -88,11 +88,27 @@ public class DataGenerator implements CommandLineRunner {
     // Generate international flights between countries
     generatedFlights.addAll(generateInternationalFlights(airportsByCountry, allPlanes));
 
+    flightTransactionCount++;
+    flightRepository.saveAll(generatedFlights);
+
     // Generate bookings for the flights
     generateBookings(generatedFlights);
 
     logger.info("Successfully generated {} flights and bookings", generatedFlights.size());
-    logger.info("Transaction counts\n flight: {}\n booking: {}\n seatBooking: {}\n country: {}\n airport: {}\n plane: {}", flightTransactionCount, bookingTransactionCount, seatBookingTransactionCount, countryTransactionCount, airportTransactionCount, planeTransactionCount);
+    logger.info(
+        "Transaction counts\n"
+            + " flight: {}\n"
+            + " booking: {}\n"
+            + " seatBooking: {}\n"
+            + " country: {}\n"
+            + " airport: {}\n"
+            + " plane: {}",
+        flightTransactionCount,
+        bookingTransactionCount,
+        seatBookingTransactionCount,
+        countryTransactionCount,
+        airportTransactionCount,
+        planeTransactionCount);
   }
 
   private List<Flight> generateDomesticFlights(List<Airport> airports, List<Plane> planes) {
@@ -114,8 +130,7 @@ public class DataGenerator implements CommandLineRunner {
               continue;
             }
             Flight flight = createFlight(departure, arrival, plane, 100.0, 800.0);
-            flights.add(flightRepository.save(flight));
-            flightTransactionCount++;
+            flights.add(flight);
           }
         }
       }
@@ -144,7 +159,7 @@ public class DataGenerator implements CommandLineRunner {
               && arrivalAirports != null
               && !arrivalAirports.isEmpty()) {
 
-            generateCountryPairFlights(planes, flights, departureAirports, arrivalAirports);
+            flights.addAll(generateCountryPairFlights(planes, departureAirports, arrivalAirports));
           }
         }
       }
@@ -153,9 +168,8 @@ public class DataGenerator implements CommandLineRunner {
     return flights;
   }
 
-  private void generateCountryPairFlights(
+  private List<Flight> generateCountryPairFlights(
       List<Plane> planes,
-      List<Flight> flights,
       List<Airport> departureAirports,
       List<Airport> arrivalAirports) {
     // Choose random airports from each country
@@ -164,11 +178,13 @@ public class DataGenerator implements CommandLineRunner {
 
     if (departure == null || arrival == null) {
       logger.warn("Skipping flight creation due to missing airport");
-      return;
+      return new ArrayList<>(); // Return empty list instead of void
     }
 
     // Generate 1-2 flights between these airports
     int numFlights = random.nextInt(2) + 1;
+
+    List<Flight> flightsToSave = new ArrayList<>();
 
     for (int k = 0; k < numFlights; k++) {
       Plane plane = getRandomItem(planes);
@@ -178,16 +194,15 @@ public class DataGenerator implements CommandLineRunner {
       }
       // International flights are more expensive
       Flight flight = createFlight(departure, arrival, plane, 300.0, 1500.0);
-      flights.add(flightRepository.save(flight));
-      flightTransactionCount++;
-      
+      flightsToSave.add(flight);
+
       // Create return flight
       if (random.nextDouble() < 0.9) { // 90% chance for return flight
         Flight returnFlight = createReturnFlight(flight);
-        flights.add(flightRepository.save(returnFlight));
-        flightTransactionCount++;
+        flightsToSave.add(returnFlight);
       }
     }
+    return flightsToSave;
   }
 
   private Flight createFlight(
@@ -268,11 +283,22 @@ public class DataGenerator implements CommandLineRunner {
   private void generateBookings(List<Flight> flights) {
     logger.info("Generating bookings for {} flights", flights.size());
 
+    Map<Long, List<Seat>> seatsByPlane = new HashMap<>();
+
+    planeRepository.findAll().forEach(plane -> {
+      List<Seat> seats = seatRepository.findByPlaneId(plane.getId());
+      seatTransactionCount++;
+      seatsByPlane.putIfAbsent(plane.getId(), seats);
+    });
+    planeTransactionCount++;
+
+    List<Booking> bookingsToSave = new ArrayList<>();
+    List<SeatBooking> seatBookingsToSave = new ArrayList<>();
+
     // For each flight, decide on a booking pattern
     for (Flight flight : flights) {
       // Get seats for this plane
-      List<Seat> availableSeats = seatRepository.findByPlaneId(flight.getPlane().getId());
-      seatTransactionCount++;
+      List<Seat> availableSeats = seatsByPlane.get(flight.getPlane().getId());
 
       if (availableSeats.isEmpty()) {
         logger.debug("No seats available for plane ID {}", flight.getPlane().getId());
@@ -296,15 +322,15 @@ public class DataGenerator implements CommandLineRunner {
         // Create a new booking
         Booking booking = new Booking();
         booking.setFlight(flight);
-        bookingRepository.save(booking);
-        bookingTransactionCount++;
+        bookingsToSave.add(booking);
 
         // Decide how many seats in this booking (1-4)
         int seatsInBooking = Math.min(random.nextInt(4) + 1, remainingSeats);
         seatsInBooking = Math.min(seatsInBooking, availableSeats.size() - bookedSeats.size());
 
         // Book seats
-        bookSeatsInBatch(flight, availableSeats, bookedSeats, booking, seatsInBooking);
+        seatBookingsToSave.addAll(
+            bookSeatsInBatch(flight, availableSeats, bookedSeats, booking, seatsInBooking));
 
         remainingSeats -= seatsInBooking;
       }
@@ -316,14 +342,20 @@ public class DataGenerator implements CommandLineRunner {
           availableSeats.size(),
           Math.round((bookedSeats.size() * 100.0) / availableSeats.size()));
     }
+
+    bookingRepository.saveAll(bookingsToSave);
+    bookingTransactionCount++;
+    seatBookingRepository.saveAll(seatBookingsToSave);
+    seatBookingTransactionCount++;
   }
 
-  private void bookSeatsInBatch(
+  private List<SeatBooking> bookSeatsInBatch(
       Flight flight,
       List<Seat> availableSeats,
       List<Seat> bookedSeats,
       Booking booking,
       int seatsInBooking) {
+    List<SeatBooking> seatBookings = new ArrayList<>();
     for (int i = 0; i < seatsInBooking; i++) {
       Seat seat = getRandomUnbookedSeat(availableSeats, bookedSeats);
       if (seat == null) break; // No more available seats
@@ -336,9 +368,9 @@ public class DataGenerator implements CommandLineRunner {
       seatBooking.setFlight(flight);
       seatBooking.setSeat(seat);
 
-      seatBookingRepository.save(seatBooking);
-      seatBookingTransactionCount++;
+      seatBookings.add(seatBooking);
     }
+    return seatBookings;
   }
 
   private double determineOccupancyRate() {
