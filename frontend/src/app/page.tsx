@@ -16,7 +16,7 @@ export default async function Home() {
   const initialFlights = await getInitialFlights();
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-background">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
       <div className="container mx-auto">
         <PaginatedFlightsTable initialData={initialFlights} />
       </div>
