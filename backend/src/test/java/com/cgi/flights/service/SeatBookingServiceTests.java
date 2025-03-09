@@ -10,6 +10,7 @@ import com.cgi.flights.model.Flight;
 import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.SeatBookingRepository;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,32 @@ public class SeatBookingServiceTests {
                   .as("checking if the second seat booking id is correct")
                   .isEqualTo(SEAT_BOOKING_2_ID),
           () -> verify(seatBookingRepository, times(1)).findByFlightId(FLIGHT_ID));
+    }
+  }
+
+  @Nested
+  @DisplayName("getSeatBookingsForFlights Tests")
+  class GetSeatBookingsForFlightsTests {
+    @Test
+    @DisplayName("Should return seat bookings for given flight IDs")
+    void getSeatBookingsForFlights_WhenCalled_ReturnsSeatBookingsForFlights() {
+      List<SeatBooking> mockSeatBookings = createSeatBookings();
+      when(seatBookingRepository.findAllById(List.of(FLIGHT_ID))).thenReturn(mockSeatBookings);
+
+      Map<Long, List<SeatBooking>> result =
+          seatBookingService.getSeatBookingsForFlights(List.of(FLIGHT_ID));
+
+      assertAll(
+          () -> assertThat(result).as("checking map size").hasSize(1),
+          () ->
+              assertThat(result.get(FLIGHT_ID).get(0).getId())
+                  .as("checking if the first seat booking id is correct")
+                  .isEqualTo(SEAT_BOOKING_1_ID),
+          () ->
+              assertThat(result.get(FLIGHT_ID).get(1).getId())
+                  .as("checking if the second seat booking id is correct")
+                  .isEqualTo(SEAT_BOOKING_2_ID),
+          () -> verify(seatBookingRepository, times(1)).findAllById(List.of(FLIGHT_ID)));
     }
   }
 
