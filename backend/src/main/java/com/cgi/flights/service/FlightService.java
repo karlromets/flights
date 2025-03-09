@@ -15,6 +15,9 @@ import com.cgi.flights.model.SeatBooking;
 import com.cgi.flights.repository.FlightRepository;
 import com.cgi.flights.specifications.FlightSpecification;
 import com.cgi.flights.utils.PaginationUtils;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +83,7 @@ public class FlightService {
 
   public FlightResponseDTO getFlightById(Long id) {
     Flight flight =
-        flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
+        flightRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Flight not found"));
 
     return FlightResponseDTO.builder()
         .id(flight.getId())
