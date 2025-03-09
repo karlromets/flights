@@ -29,18 +29,13 @@ public class CountryServiceTests {
   private static final String COUNTRY_2_NAME = "Latvia";
   private static final Long COUNTRY_2_ID = 2L;
 
-  private static final List<Country> COUNTRIES =
-      List.of(
-          Country.builder().id(COUNTRY_1_ID).name(COUNTRY_1_NAME).build(),
-          Country.builder().id(COUNTRY_2_ID).name(COUNTRY_2_NAME).build());
-
   @Nested
   @DisplayName("getCountries Tests")
   class GetCountriesTests {
     @Test
     @DisplayName("Should return all countries")
     void getCountries_WhenCalled_ReturnsAllCountries() {
-      when(countryRepository.findAll()).thenReturn(COUNTRIES);
+      when(countryRepository.findAll()).thenReturn(createCountries());
 
       List<CountryResponseDTO> result = countryService.getCountries();
 
@@ -64,5 +59,17 @@ public class CountryServiceTests {
                   .isEqualTo(COUNTRY_2_ID),
           () -> verify(countryRepository, times(1)).findAll());
     }
+  }
+
+  private List<Country> createCountries() {
+    Country country1 = new Country();
+    country1.setId(COUNTRY_1_ID);
+    country1.setName(COUNTRY_1_NAME);
+
+    Country country2 = new Country();
+    country2.setId(COUNTRY_2_ID);
+    country2.setName(COUNTRY_2_NAME);
+
+    return List.of(country1, country2);
   }
 }
