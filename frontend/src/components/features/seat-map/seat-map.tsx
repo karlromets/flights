@@ -16,6 +16,18 @@ export default function SeatMap({ seats }: SeatMapProps) {
   const { preferences } = useContext(SeatPreferencesContext);
   const [suggestions, setSuggestions] = useState<SeatResponseDTO[]>([]);
 
+  const [selectedSeats, setSelectedSeats] = useState<SeatResponseDTO[]>([]);
+  const handleSeatSelect = (seat: SeatResponseDTO) => {
+    if (seat.isOccupied) return; // Prevent selecting occupied seats
+
+    // If seat is already selected remove it
+    if (selectedSeats.some((s) => s.id === seat.id)) {
+      setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id));
+    } else {
+      setSelectedSeats([...selectedSeats, seat]);
+    }
+  };
+
   useEffect(() => {
     setSuggestions(sm.getSuggestions(preferences));
   }, [preferences, sm]);
@@ -37,11 +49,14 @@ export default function SeatMap({ seats }: SeatMapProps) {
           </span>
           {sm.getSeatsByRow(row).map((seat) => {
             const isMatch = suggestions.some((s) => s.id === seat.id);
+            const isSelected = selectedSeats.some((s) => s.id === seat.id);
             return (
               <Button
                 variant={seat.isOccupied ? "destructive" : isMatch ? "default" : "secondary"}
                 key={seat.id}
-                className="w-6 h-6 p-4"
+                disabled={seat.isOccupied}
+                className={`w-6 h-6 p-4 ${isSelected ? "bg-emerald-500 hover:bg-emerald-600" : ""}`}
+                onClick={() => handleSeatSelect(seat)}
               >
                 {seat.id}
               </Button>
