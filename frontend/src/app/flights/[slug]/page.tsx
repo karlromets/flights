@@ -4,7 +4,13 @@ import SeatMap from "@/components/features/seat-map/seat-map";
 import { SeatPreferencesProvider } from "@/components/features/seat-map/seat-preferences-context";
 import SeatSuggestor from "@/components/features/seat-map/seat-suggestor";
 import SelectedSeats from "@/components/features/seat-map/selected-seats";
-// import { SeatMapper } from "@/lib/utils";
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  return {
+    title: `Flight ${parseInt(params.slug)}`,
+  };
+}
 
 async function getFlight(id: number) {
   const flightController = getFlightController();

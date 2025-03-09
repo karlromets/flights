@@ -1,5 +1,10 @@
 import { getFlightController } from "@/api/flight-controller";
 import { PaginatedFlightsTable } from "@/components/features/flights-table/paginated-flights-table";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Flights',
+}
 
 async function getInitialFlights() {
   const flightController = getFlightController();
