@@ -11,8 +11,12 @@ import jakarta.persistence.criteria.Root;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -20,6 +24,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FlightSpecification implements Specification<Flight> {
 
   private String searchTerm;
