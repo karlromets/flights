@@ -29,6 +29,8 @@ public class TestDataFactory {
 
   public static final Instant DEPARTURE_TIME = Instant.now();
   public static final Instant ARRIVAL_TIME = DEPARTURE_TIME.plus(1, ChronoUnit.HOURS);
+  private static final String ARRIVAL_TIME_STR = "2023-01-02T12:00:00Z";
+  private static final String DEPARTURE_TIME_STR = "2023-01-01T12:00:00Z";
 
   public static final String DEPARTURE_AIRPORT_NAME = "Departure Airport";
   public static final String DEPARTURE_COUNTRY_NAME = "Departure Country";
@@ -56,6 +58,16 @@ public class TestDataFactory {
 
   public static FlightFilterDTO createEmptyFilter() {
     return new FlightFilterDTO(null, null, null, null, null, null, null, null, null, null);
+  }
+
+  public static FlightFilterDTO createFilterWithArrivalTime() {
+    return new FlightFilterDTO(
+        null, null, null, null, null, null, null, ARRIVAL_TIME_STR, null, null);
+  }
+
+  public static FlightFilterDTO createFilterWithDepartureTime() {
+    return new FlightFilterDTO(
+        null, null, null, null, null, null, DEPARTURE_TIME_STR, null, null, null);
   }
 
   public static FlightFilterDTO createFilterWithNonExistentAirport() {
