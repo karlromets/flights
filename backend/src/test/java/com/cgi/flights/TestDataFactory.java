@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 public class TestDataFactory {
   public static final Long FIRST_ID = 1L;
   public static final Long SECOND_ID = 2L;
+  public static final Long NON_EXISTENT_ID = 999L;
 
   public static final Double FLIGHT_PRICE = 200.0;
 
@@ -55,6 +56,11 @@ public class TestDataFactory {
 
   public static FlightFilterDTO createEmptyFilter() {
     return new FlightFilterDTO(null, null, null, null, null, null, null, null, null, null);
+  }
+
+  public static FlightFilterDTO createFilterWithNonExistentAirport() {
+    return new FlightFilterDTO(
+        "NonexistentAirport", null, null, null, null, null, null, null, null, null);
   }
 
   public static PaginationRequest createPaginationRequest() {
