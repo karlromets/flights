@@ -1,5 +1,6 @@
 package com.cgi.flights.controller;
 
+import static com.cgi.flights.TestDataFactory.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,10 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cgi.flights.dto.request.FlightFilterDTO;
-import com.cgi.flights.dto.response.AirportResponseDTO;
 import com.cgi.flights.dto.response.FlightResponseDTO;
-import com.cgi.flights.dto.response.PlaneResponseDTO;
-import com.cgi.flights.dto.response.SeatResponseDTO;
 import com.cgi.flights.exception.GlobalExceptionHandler;
 import com.cgi.flights.model.PaginationRequest;
 import com.cgi.flights.model.PagingResult;
@@ -22,8 +20,6 @@ import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -70,12 +65,9 @@ class FlightControllerTests {
     @DisplayName("Should return all flights")
     void getFlights_WhenRequested_ReturnsAllFlights() throws Exception {
       // Given
-      Instant departure = Instant.now();
-      Instant arrival = departure.plus(1, ChronoUnit.HOURS);
-      PagingResult<FlightResponseDTO> response = createListFlightResponseDTO(departure, arrival);
-      FlightFilterDTO filter =
-          new FlightFilterDTO(null, null, null, null, null, null, null, null, null, null);
-      final PaginationRequest request = new PaginationRequest(0, 10, "id", Sort.Direction.DESC);
+      PagingResult<FlightResponseDTO> response = createFlightsPagingResult();
+      FlightFilterDTO filter = createEmptyFilter();
+      final PaginationRequest request = createPaginationRequest();
 
       when(flightService.getAllFlights(request, filter)).thenReturn(response);
 
@@ -85,28 +77,29 @@ class FlightControllerTests {
           .andExpectAll(
               status().isOk(),
               jsonPath(CONTENT_PATH, hasSize(1)),
-              jsonPath(FIRST_ELEMENT_PATH + ".id", is(1)),
-              jsonPath(FIRST_ELEMENT_PATH + ".price", is(100.0)),
-              jsonPath(DEPARTURE_AIRPORT_PATH + ".name", is("DepartureAirport")),
-              jsonPath(DEPARTURE_AIRPORT_PATH + ".cityName", is("DepartureCity")),
-              jsonPath(DEPARTURE_AIRPORT_PATH + ".countryName", is("DepartureCountry")),
-              jsonPath(ARRIVAL_AIRPORT_PATH + ".name", is("ArrivalAirport")),
-              jsonPath(ARRIVAL_AIRPORT_PATH + ".cityName", is("ArrivalCity")),
-              jsonPath(ARRIVAL_AIRPORT_PATH + ".countryName", is("ArrivalCountry")),
-              jsonPath(FIRST_ELEMENT_PATH + ".departureTime", is(convertToEpochTime(departure))),
-              jsonPath(FIRST_ELEMENT_PATH + ".arrivalTime", is(convertToEpochTime(arrival))),
-              jsonPath(PLANE_PATH + ".name", is("PlaneName")),
-              jsonPath(PLANE_PATH + ".model", is("PlaneModel")),
+              jsonPath(FIRST_ELEMENT_PATH + ".id", is(FIRST_ID.intValue())),
+              jsonPath(FIRST_ELEMENT_PATH + ".price", is(FLIGHT_PRICE)),
+              jsonPath(DEPARTURE_AIRPORT_PATH + ".name", is(DEPARTURE_AIRPORT_NAME)),
+              jsonPath(DEPARTURE_AIRPORT_PATH + ".cityName", is(DEPARTURE_CITY_NAME)),
+              jsonPath(DEPARTURE_AIRPORT_PATH + ".countryName", is(DEPARTURE_COUNTRY_NAME)),
+              jsonPath(ARRIVAL_AIRPORT_PATH + ".name", is(ARRIVAL_AIRPORT_NAME)),
+              jsonPath(ARRIVAL_AIRPORT_PATH + ".cityName", is(ARRIVAL_CITY_NAME)),
+              jsonPath(ARRIVAL_AIRPORT_PATH + ".countryName", is(ARRIVAL_COUNTRY_NAME)),
+              jsonPath(
+                  FIRST_ELEMENT_PATH + ".departureTime", is(convertToEpochTime(DEPARTURE_TIME))),
+              jsonPath(FIRST_ELEMENT_PATH + ".arrivalTime", is(convertToEpochTime(ARRIVAL_TIME))),
+              jsonPath(PLANE_PATH + ".name", is(PLANE_NAME)),
+              jsonPath(PLANE_PATH + ".producer", is(PLANE_PRODUCER_NAME)),
               jsonPath(PLANE_PATH + ".seats", hasSize(1)),
-              jsonPath(SEATS_PATH + ".id", is(1)),
-              jsonPath(SEATS_PATH + ".rowNumber", is(1)),
-              jsonPath(SEATS_PATH + ".columnLetter", is("A")),
-              jsonPath(SEATS_PATH + ".price", is(100.0)),
-              jsonPath(SEATS_PATH + ".SeatClass", is("Class")),
-              jsonPath(SEATS_PATH + ".isWindow", is(true)),
-              jsonPath(SEATS_PATH + ".isAisle", is(true)),
-              jsonPath(SEATS_PATH + ".isExitRow", is(false)),
-              jsonPath(SEATS_PATH + ".isOccupied", is(false)));
+              jsonPath(SEATS_PATH + ".id", is(FIRST_ID.intValue())),
+              jsonPath(SEATS_PATH + ".rowNumber", is(SEAT_ROW_NUMBER.intValue())),
+              jsonPath(SEATS_PATH + ".columnLetter", is(SEAT_COLUMN_LETTER)),
+              jsonPath(SEATS_PATH + ".price", is(SEAT_PRICE)),
+              jsonPath(SEATS_PATH + ".SeatClass", is(SEAT_CLASS)),
+              jsonPath(SEATS_PATH + ".isWindow", is(SEAT_IS_WINDOW)),
+              jsonPath(SEATS_PATH + ".isAisle", is(SEAT_IS_AISLE)),
+              jsonPath(SEATS_PATH + ".isExitRow", is(SEAT_IS_EXIT_ROW)),
+              jsonPath(SEATS_PATH + ".isOccupied", is(SEAT_IS_OCCUPIED)));
     }
 
     @Test
@@ -154,45 +147,6 @@ class FlightControllerTests {
               status().isBadRequest(),
               jsonPath("$.error", is("Invalid ID format: must be numeric")));
     }
-  }
-
-  private PagingResult<FlightResponseDTO> createListFlightResponseDTO(
-      Instant departure, Instant arrival) {
-    FlightResponseDTO flightResponse =
-        FlightResponseDTO.builder()
-            .id(1L)
-            .price(100.0)
-            .departureAirport(createAirportResponseDTO(true))
-            .arrivalAirport(createAirportResponseDTO(false))
-            .departureTime(departure)
-            .arrivalTime(arrival)
-            .plane(createPlaneResponseDTO())
-            .build();
-
-    return new PagingResult<FlightResponseDTO>(List.of(flightResponse), 1, 1L, 10, 0, false);
-  }
-
-  private PlaneResponseDTO createPlaneResponseDTO() {
-    return new PlaneResponseDTO(1L, "PlaneName", "PlaneModel", List.of(createSeatResponseDTO()));
-  }
-
-  private AirportResponseDTO createAirportResponseDTO(boolean isDeparture) {
-    if (isDeparture) {
-      return new AirportResponseDTO(1L, "DepartureAirport", "DepartureCity", "DepartureCountry");
-    }
-    return new AirportResponseDTO(2L, "ArrivalAirport", "ArrivalCity", "ArrivalCountry");
-  }
-
-  private SeatResponseDTO createSeatResponseDTO() {
-    return new SeatResponseDTO(1L, 1L, "A", 100.0, "Class", true, true, false, false);
-  }
-
-  private FlightResponseDTO createFlightResponseDTO() {
-    return FlightResponseDTO.builder().id(1L).build();
-  }
-
-  private PagingResult<FlightResponseDTO> createEmptyPagingResult() {
-    return new PagingResult<>(List.of(), 0, 0, 0, 0, false);
   }
 
   // Generated with the help of AI
