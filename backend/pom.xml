@@ -93,6 +93,29 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<!-- https://www.baeldung.com/jacoco-report-exclude -->
+				<configuration>
+					<excludes>
+						<exclude>
+							com/cgi/flights/dto/**/*.class
+						</exclude>
+						<exclude>
+							com/cgi/flights/utils/*.class
+						</exclude>
+						<exclude>
+							com/cgi/flights/*.class
+						</exclude>
+						<exclude>
+							com/cgi/flights/specifications/*.class
+						</exclude>
+						<exclude>
+							com/cgi/flights/exception/*.class
+						</exclude>
+						<exclude>
+							com/cgi/flights/model/*.class
+						</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
