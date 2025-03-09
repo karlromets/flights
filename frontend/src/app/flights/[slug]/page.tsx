@@ -6,9 +6,10 @@ import SeatSuggestor from "@/components/features/seat-map/seat-suggestor";
 import SelectedSeats from "@/components/features/seat-map/selected-seats";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: FlightPageProps): Promise<Metadata> {
+  const { slug } = await params;
   return {
-    title: `Flight ${parseInt(params.slug)}`,
+    title: `Flight ${parseInt(slug)}`,
   };
 }
 
