@@ -32,8 +32,8 @@ export default function SeatMap({ seats }: SeatMapProps) {
   }, [preferences, sm]);
 
   return (
-    <>
-      <div className="flex">
+    <div className="flex flex-col w-fit px-4 gap-2">
+      <div className="flex justify-end">
         <span className="font-bold text-sm h-9 pr-[70px] py-2"></span>
         {sm.getColumns().map((col) => (
           <span className="font-bold text-sm h-9 px-[15.5px] py-2" key={col}>
@@ -42,7 +42,7 @@ export default function SeatMap({ seats }: SeatMapProps) {
         ))}
       </div>
       {sm.getRows().map((row) => (
-        <div key={row} className="flex justify-center gap-2">
+        <div key={row} className="flex gap-2 justify-end">
           <span className="font-bold text-sm h-9 px-[15.5px] pt-1" key={row}>
             {row}
           </span>
@@ -63,6 +63,6 @@ export default function SeatMap({ seats }: SeatMapProps) {
           })}
         </div>
       ))}
-    </>
+    </div>
   );
 }
