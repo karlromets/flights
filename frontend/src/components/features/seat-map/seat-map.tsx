@@ -43,6 +43,11 @@ export default function SeatMap({ seats }: SeatMapProps) {
       </div>
       {sm.getRows().map((row) => (
         <div key={row} className="flex gap-2 justify-end">
+          {sm.getSeatsByRow(row).some((seat) => seat.isExitRow) && (
+            <div className="flex items-center justify-center px-2 text-sm bg-red-500 font-bold tracking-wider h-6 my-auto">
+              EXIT
+            </div>
+          )}
           <span className="font-bold text-sm h-9 px-[15.5px] pt-1" key={row}>
             {row}
           </span>
