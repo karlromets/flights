@@ -16,7 +16,6 @@ export default function SelectedSeats() {
 
   return (
     <>
-      {selectedSeats.length > 0 && (
         <div className="mt-4 p-4 border rounded-lg">
           <h3 className="text-lg font-bold mb-2">Selected Seats</h3>
           <Separator className="my-2" />
@@ -27,15 +26,15 @@ export default function SelectedSeats() {
                   Seat {seat.id} | {seat.rowNumber}
                   {seat.columnLetter} | {seat.SeatClass}
                 </span>
-                <span>${seat.price.toFixed(2)}</span>
+                <span className="text-emerald-500">${seat.price.toFixed(2)}</span>
               </div>
             ))}
           </div>
           <div className="mt-4 text-right">
-            <span className="font-bold">Total Price:</span> ${totalPrice.toFixed(2)}
+            <span className="font-bold">Total Price:</span>{" "}
+            <span className="text-emerald-500">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
-      )}
     </>
   );
 }
