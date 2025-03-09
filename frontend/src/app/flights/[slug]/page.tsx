@@ -3,6 +3,7 @@ import { FlightDetails } from "@/components/features/seat-map/flight-details";
 import SeatMap from "@/components/features/seat-map/seat-map";
 import { SeatPreferencesProvider } from "@/components/features/seat-map/seat-preferences-context";
 import SeatSuggestor from "@/components/features/seat-map/seat-suggestor";
+import SelectedSeats from "@/components/features/seat-map/selected-seats";
 // import { SeatMapper } from "@/lib/utils";
 
 async function getFlight(id: number) {
@@ -39,6 +40,7 @@ export default async function FlightPage({ params }: FlightPageProps) {
             <div>
               <FlightDetails flight={flight} />
               <SeatSuggestor />
+              <SelectedSeats />
             </div>
             <div className="flex flex-col gap-2 mx-auto w-[500px]">
               <SeatMap seats={seats} />

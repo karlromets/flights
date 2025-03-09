@@ -13,10 +13,9 @@ interface SeatMapProps {
 export default function SeatMap({ seats }: SeatMapProps) {
   const sm = useMemo(() => new SeatMapper(seats), [seats]);
 
-  const { preferences } = useContext(SeatPreferencesContext);
+  const { preferences, selectedSeats, setSelectedSeats } = useContext(SeatPreferencesContext);
   const [suggestions, setSuggestions] = useState<SeatResponseDTO[]>([]);
 
-  const [selectedSeats, setSelectedSeats] = useState<SeatResponseDTO[]>([]);
   const handleSeatSelect = (seat: SeatResponseDTO) => {
     if (seat.isOccupied) return; // Prevent selecting occupied seats
 
