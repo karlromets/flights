@@ -3,14 +3,17 @@ import { PaginatedFlightsTable } from "@/components/features/flights-table/pagin
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Flights',
-}
+  title: "Flights",
+};
+
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 async function getInitialFlights() {
   const flightController = getFlightController();
   try {
     const response = await flightController.getFlights({ page: 0, size: 10 });
-    return response.data;
+    return response;
   } catch (error) {
     console.error(error);
     return { content: [], totalPages: 0 };
@@ -23,7 +26,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
       <div className="container mx-auto">
-        <PaginatedFlightsTable initialData={initialFlights} />
+          <PaginatedFlightsTable initialData={initialFlights} />
       </div>
     </div>
   );
