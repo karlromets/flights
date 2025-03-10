@@ -91,7 +91,7 @@ const LocationSelector = ({
     const fetchCountries = async () => {
       try {
         const response = await getCountryController().getCountries()
-        const apiCountries = response.data
+        const apiCountries = response
         
         // Filter and map countries from JSON to match API response structure
         const filteredCountries = (countries as CountryProps[]).filter(c => 

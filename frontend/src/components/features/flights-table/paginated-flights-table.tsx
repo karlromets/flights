@@ -45,7 +45,7 @@ export function PaginatedFlightsTable({ initialData }: PaginatedFlightsTableProp
       }
 
       const response = await getFlights(params);
-      setFlights(response!.data);
+      setFlights(response!);
     }
 
     fetchFlights();
@@ -70,7 +70,7 @@ export function PaginatedFlightsTable({ initialData }: PaginatedFlightsTableProp
             onPaginationChange={setPagination}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-screen bg-background">
+          <div className="flex flex-col items-center justify-center bg-background">
             <h1>No flights found</h1>
           </div>
         )}

@@ -17,10 +17,10 @@ async function getFlight(id: number) {
   const flightController = getFlightController();
   try {
     const response = await flightController.getFlightById(id);
-    return response.data;
+    return response;
   } catch (error) {
     console.error(error);
-    return { content: [], totalPages: 0 };
+    return null;
   }
 }
 
@@ -34,7 +34,7 @@ export default async function FlightPage({ params }: FlightPageProps) {
   const { slug } = await params;
   const flight = await getFlight(parseInt(slug));
 
-  if (!("plane" in flight) || !flight.plane.seats) {
+  if (!flight || !flight.plane || !flight.plane.seats) {
     return <h1>Flight details not available</h1>;
   }
   const seats = flight.plane.seats;
