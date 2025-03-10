@@ -8,10 +8,15 @@ export default defineConfig({
       client: "axios",
       schemas: "src/api/types",
       mode: "tags",
-      baseUrl: "http://localhost:8080/",
       mock: false,
       prettier: true,
       clean: true,
+      override: {
+        mutator: {
+          path: './src/lib/axios-instance.ts',
+          name: 'axiosInstance',
+        },
+      },
     },
     input: {
       target: "http://localhost:8080/v3/api-docs",

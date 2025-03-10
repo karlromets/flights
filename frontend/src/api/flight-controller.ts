@@ -4,28 +4,22 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-
 import type { FlightResponseDTO, GetFlightsParams, PagingResultFlightResponseDTO } from "./types";
 
+import { axiosInstance } from "../lib/axios-instance";
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 export const getFlightController = () => {
-  const getFlights = <TData = AxiosResponse<PagingResultFlightResponseDTO>>(
-    params?: GetFlightsParams,
-    options?: AxiosRequestConfig
-  ): Promise<TData> => {
-    return axios.get(`http://localhost:8080/api/flights`, {
-      ...options,
-      params: { ...params, ...options?.params },
-    });
+  const getFlights = (params?: GetFlightsParams, options?: SecondParameter<typeof axiosInstance>) => {
+    return axiosInstance<PagingResultFlightResponseDTO>({ url: `/api/flights`, method: "GET", params }, options);
   };
-  const getFlightById = <TData = AxiosResponse<FlightResponseDTO>>(
-    id: number,
-    options?: AxiosRequestConfig
-  ): Promise<TData> => {
-    return axios.get(`http://localhost:8080/api/flights/${id}`, options);
+  const getFlightById = (id: number, options?: SecondParameter<typeof axiosInstance>) => {
+    return axiosInstance<FlightResponseDTO>({ url: `/api/flights/${id}`, method: "GET" }, options);
   };
   return { getFlights, getFlightById };
 };
-export type GetFlightsResult = AxiosResponse<PagingResultFlightResponseDTO>;
-export type GetFlightByIdResult = AxiosResponse<FlightResponseDTO>;
+export type GetFlightsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getFlightController>["getFlights"]>>>;
+export type GetFlightByIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getFlightController>["getFlightById"]>>
+>;

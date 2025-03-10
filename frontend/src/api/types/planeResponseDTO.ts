@@ -9,6 +9,6 @@ import type { SeatResponseDTO } from "./seatResponseDTO";
 export interface PlaneResponseDTO {
   id?: number;
   name?: string;
-  model?: string;
+  producer?: string;
   seats?: SeatResponseDTO[];
 }

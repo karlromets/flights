@@ -4,15 +4,18 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-
 import type { CountryResponseDTO } from "./types";
 
+import { axiosInstance } from "../lib/axios-instance";
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 export const getCountryController = () => {
-  const getCountries = <TData = AxiosResponse<CountryResponseDTO[]>>(options?: AxiosRequestConfig): Promise<TData> => {
-    return axios.get(`http://localhost:8080/api/countries`, options);
+  const getCountries = (options?: SecondParameter<typeof axiosInstance>) => {
+    return axiosInstance<CountryResponseDTO[]>({ url: `/api/countries`, method: "GET" }, options);
   };
   return { getCountries };
 };
-export type GetCountriesResult = AxiosResponse<CountryResponseDTO[]>;
+export type GetCountriesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCountryController>["getCountries"]>>
+>;
